@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { createAirQualityLayer } from './index.js';
 import {
   AIR_QUALITY_PROVIDERS,
   bandForValue,
@@ -138,4 +139,88 @@ test('the combined source keeps the networks that answer', async () => {
     createCombinedAirQualitySource([broken, broken]).getSnapshot(),
     /down/,
   );
+});
+
+test('a past time asks the feed for that moment and is judged against itself', async () => {
+  const requested = [];
+  const past = payload();
+  past.items[0].timestamp = '2026-10-09T17:00:00+08:00';
+  const source = createNeaAirQualitySource({
+    now: () => NOW,
+    fetchImpl: async (url) => {
+      requested.push(String(url));
+      return Response.json(past);
+    },
+  });
+  const readings = await source.getSnapshot({ at: '2026-10-09T17:00:00+08:00' });
+  assert.deepEqual(requested, [
+    'https://api.data.gov.sg/v1/environment/psi?date_time=2026-10-09T17%3A00%3A00%2B08%3A00',
+  ]);
+  assert.equal(readings.length, 3);
+  await assert.rejects(
+    source.getSnapshot({ at: 'yesterday' }),
+    /Malformed NEA PSI request time/,
+  );
+});
+
+test('a past time is only put to networks that keep history', async () => {
+  const asked = [];
+  const live = {
+    getSnapshot: async () => {
+      asked.push('live');
+      return [{ id: 'eccc:a', value: 3 }];
+    },
+  };
+  const history = {
+    history: true,
+    getSnapshot: async (options) => {
+      asked.push(`history:${options.at}`);
+      return [{ id: 'nea:west', value: 150 }];
+    },
+  };
+  const combined = createCombinedAirQualitySource([live, history]);
+  assert.equal((await combined.getSnapshot({ at: '2026-10-09T17:00:00+08:00' })).length, 1);
+  assert.deepEqual(asked, ['history:2026-10-09T17:00:00+08:00']);
+  await assert.rejects(
+    createCombinedAirQualitySource([live]).getSnapshot({ at: '2026-10-09T17:00:00+08:00' }),
+    /keeps history/,
+  );
+});
+
+function layerHarness(getSnapshot) {
+  const layer = createAirQualityLayer({
+    source: { getSnapshot },
+    overlayHost: { setEntries() {}, setVisible() {}, clearSource() {} },
+  });
+  layer.init({ dataSources: { add() {}, remove() {} } });
+  return layer;
+}
+
+test('the layer takes a past time as a parameter and returns to live without one', async () => {
+  const asked = [];
+  const layer = layerHarness(async ({ at }) => {
+    asked.push(at);
+    return [];
+  });
+  layer.enable();
+  assert.deepEqual(layer.getParams(), {});
+  assert.equal(layer.setParams({ at: '2026-10-16T15:00:00+08:00' }), true);
+  assert.deepEqual(layer.getParams(), { at: '2026-10-16T15:00:00+08:00' });
+  await layer.update();
+  assert.ok(asked.includes('2026-10-16T15:00:00+08:00'));
+  assert.equal(layer.setParams({}), true);
+  assert.deepEqual(layer.getParams(), {});
+  await layer.update();
+  assert.equal(asked.at(-1), null);
+});
+
+test('malformed times are refused and disabling returns the layer to live', () => {
+  const layer = layerHarness(async () => []);
+  layer.enable();
+  for (const at of ['yesterday', '2026-10-16', 20261016, '2026-13-45T99:00:00+08:00', '2026-10-16T15:00:00']) {
+    assert.equal(layer.setParams({ at }), false, String(at));
+  }
+  assert.equal(layer.setParams({ at: '2026-10-16T15:00:00+08:00' }), true);
+  layer.disable();
+  assert.deepEqual(layer.getParams(), {});
 });

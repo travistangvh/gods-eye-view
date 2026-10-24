@@ -731,7 +731,10 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
-          'air-quality': true,
+          'air-quality': {
+            enabled: true,
+            params: { at: '2026-09-05T18:00:00+08:00' },
+          },
         },
       },
       {
@@ -846,7 +849,10 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
-          'air-quality': true,
+          'air-quality': {
+            enabled: true,
+            params: { at: '2026-10-09T17:00:00+08:00' },
+          },
         },
         dataPackIds: ['videos'],
         interactions: [
@@ -1005,7 +1011,10 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
-          'air-quality': true,
+          'air-quality': {
+            enabled: true,
+            params: { at: '2026-10-15T12:00:00+08:00' },
+          },
         },
         dataPackIds: ['videos'],
         interactions: [
@@ -1043,7 +1052,10 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
-          'air-quality': true,
+          'air-quality': {
+            enabled: true,
+            params: { at: '2026-10-16T15:00:00+08:00' },
+          },
         },
         dataPackIds: ['videos'],
         interactions: [

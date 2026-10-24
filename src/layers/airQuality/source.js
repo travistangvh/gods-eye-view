@@ -133,7 +133,12 @@ export function createNeaAirQualitySource({
   timeoutMs = 15_000,
 } = {}) {
   return {
-    async getSnapshot({ signal } = {}) {
+    /** The feed keeps history: `at` asks for the reading at a past time. */
+    history: true,
+    async getSnapshot({ signal, at = null } = {}) {
+      const atMs = at === null || at === undefined ? null : Date.parse(at);
+      if (atMs !== null && !Number.isFinite(atMs))
+        throw new Error(msg('Malformed NEA PSI request time'));
       const controller = new AbortController();
       const abort = () => controller.abort(signal.reason);
       signal?.addEventListener('abort', abort, { once: true });
@@ -143,7 +148,11 @@ export function createNeaAirQualitySource({
       );
       try {
         signal?.throwIfAborted();
-        const response = await fetchImpl(NEA_PSI_URL, {
+        const url =
+          atMs === null
+            ? NEA_PSI_URL
+            : `${NEA_PSI_URL}?date_time=${encodeURIComponent(at)}`;
+        const response = await fetchImpl(url, {
           headers: { Accept: 'application/json' },
           signal: controller.signal,
         });
@@ -153,7 +162,8 @@ export function createNeaAirQualitySource({
           NEA_MAX_RESPONSE_BYTES,
           controller.signal,
         );
-        const readings = normalizeNeaPsi(payload, now());
+        // A past reading is judged against its own time, not today's.
+        const readings = normalizeNeaPsi(payload, atMs ?? now());
         if (!readings) throw new Error(msg('Malformed NEA PSI response'));
         return readings;
       } finally {
@@ -175,11 +185,18 @@ export function createNeaAirQualitySource({
 export function createCombinedAirQualitySource(sources) {
   return {
     async getSnapshot(options) {
+      // A past time can only be answered by a network that keeps history.
+      const asked =
+        options?.at === null || options?.at === undefined
+          ? sources
+          : sources.filter((source) => source.history === true);
       const results = await Promise.allSettled(
-        sources.map((source) => source.getSnapshot(options)),
+        asked.map((source) => source.getSnapshot(options)),
       );
       options?.signal?.throwIfAborted();
       const ok = results.filter((result) => result.status === 'fulfilled');
+      if (results.length === 0)
+        throw new Error(msg('No air-quality network keeps history'));
       if (ok.length === 0) throw results[0].reason;
       return ok
         .flatMap((result) => result.value)

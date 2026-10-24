@@ -450,6 +450,8 @@
   "Singapore only · NEA PSI, five regions": "仅限新加坡 · 新加坡国家环境局 PSI，五个区域",
   "NEA request timed out": "NEA 请求超时",
   "Malformed NEA PSI response": "NEA PSI 响应格式错误",
+  "Malformed NEA PSI request time": "NEA PSI 请求时间格式错误",
+  "No air-quality network keeps history": "没有空气质量网络保存历史数据",
   "Air quality": "空气质量",
   "Canada only · ECCC AQHI network": "仅限加拿大 · ECCC AQHI 站网",
   "ECCC request timed out": "ECCC 请求超时",

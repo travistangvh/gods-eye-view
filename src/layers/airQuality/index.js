@@ -25,6 +25,9 @@ export {
 const STATION_MARKER_RADIUS_M = 6_000;
 /** Readings listed in the readout card. */
 const READOUT_LIMIT = 5;
+/** An ISO-8601 time with an offset, as scenes pass it: 2026-10-09T17:00:00+08:00. */
+const AT_PATTERN =
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$/;
 
 /** Own one air-quality display, its refresh lifecycle, and its readout card. */
 export function createAirQualityLayer({ source, overlayHost } = {}) {
@@ -39,6 +42,8 @@ export function createAirQualityLayer({ source, overlayHost } = {}) {
   let _lastUpdate = null;
   let _lastError = null;
   let _enabled = false;
+  /** A past time to show instead of the live reading, or null. */
+  let _at = null;
   let rowControlsListener = null;
 
   const notify = () => rowControlsListener?.();
@@ -74,6 +79,7 @@ export function createAirQualityLayer({ source, overlayHost } = {}) {
       _lastUpdate = null;
       _lastError = null;
       _enabled = false;
+      _at = null;
       overlayHost.setVisible(AIR_QUALITY_OVERLAY_SOURCE_ID, false);
     },
 
@@ -89,6 +95,8 @@ export function createAirQualityLayer({ source, overlayHost } = {}) {
       _request?.abort();
       _request = null;
       _enabled = false;
+      // Leaving the layer returns it to the live reading.
+      _at = null;
       if (_dataSource) _dataSource.show = false;
       overlayHost.clearSource(AIR_QUALITY_OVERLAY_SOURCE_ID);
       overlayHost.setVisible(AIR_QUALITY_OVERLAY_SOURCE_ID, false);
@@ -101,7 +109,10 @@ export function createAirQualityLayer({ source, overlayHost } = {}) {
       const request = new AbortController();
       _request = request;
       try {
-        const readings = await source.getSnapshot({ signal: request.signal });
+        const readings = await source.getSnapshot({
+          signal: request.signal,
+          at: _at,
+        });
         // A superseded or aborted request must not touch the scene, and neither
         // must one that lands after the layer was switched off.
         if (request.signal.aborted || _request !== request || !_enabled)
@@ -122,6 +133,36 @@ export function createAirQualityLayer({ source, overlayHost } = {}) {
       } finally {
         if (_request === request) _request = null;
       }
+    },
+
+    /**
+     * `{ at: '<ISO time with offset>' }` shows that moment's reading, for
+     * networks that keep history; an empty or null `at` returns to live.
+     */
+    setParams(params) {
+      const raw = params?.at;
+      let next = null;
+      if (raw !== undefined && raw !== null && raw !== '') {
+        if (
+          typeof raw !== 'string' ||
+          !AT_PATTERN.test(raw) ||
+          !Number.isFinite(Date.parse(raw))
+        )
+          return false;
+        next = raw;
+      }
+      if (next === _at) return true;
+      _at = next;
+      // Never leave another moment's readings on screen while the new load runs.
+      _readings = [];
+      _count = 0;
+      this._render();
+      if (_enabled) this.update();
+      return true;
+    },
+
+    getParams() {
+      return _at ? { at: _at } : {};
     },
 
     /** Rebuild entities and overlay labels from the current readings. */
@@ -232,7 +273,9 @@ export function createAirQualityLayer({ source, overlayHost } = {}) {
           label: t(provider.label),
           coverage: t(provider.coverage),
           validTime: newest ? new Date(newest).toISOString() : undefined,
-          detail: `${provider.network} · ${provider.scale}`,
+          detail: _at
+            ? `${provider.network} · ${provider.scale} · ${_at}`
+            : `${provider.network} · ${provider.scale}`,
           status: _lastError
             ? translateFeedError(_lastError)
             : _count === 0
@@ -294,7 +337,8 @@ export function createAirQualityLayer({ source, overlayHost } = {}) {
         error: _lastError,
         observedAt: newestObservation(_readings),
         // Only a completed refresh can be stale; before one there is no feed.
-        stale: _lastUpdate !== null && readingsAreStale(_readings),
+        // A past moment is not expected to be fresh.
+        stale: _lastUpdate !== null && !_at && readingsAreStale(_readings),
       };
     },
   };

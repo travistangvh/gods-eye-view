@@ -2867,6 +2867,8 @@
   "Singapore only · NEA PSI, five regions": "Только Сингапур · PSI NEA, пять регионов",
   "NEA request timed out": "Время запроса к NEA истекло",
   "Malformed NEA PSI response": "Некорректный ответ NEA PSI",
+  "Malformed NEA PSI request time": "Некорректное время запроса NEA PSI",
+  "No air-quality network keeps history": "Ни одна сеть качества воздуха не хранит историю",
   "Air quality request failed": "Не удалось запросить данные о качестве воздуха",
   "ECCC request timed out": "Истекло время ожидания запроса к ECCC",
   "Malformed AQHI station response": "Некорректный ответ со станциями AQHI",

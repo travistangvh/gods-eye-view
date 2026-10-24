@@ -2808,6 +2808,8 @@
   "Singapore only · NEA PSI, five regions": "Solo Singapur · PSI de la NEA, cinco regiones",
   "NEA request timed out": "Se agotó el tiempo de la solicitud a la NEA",
   "Malformed NEA PSI response": "Respuesta PSI de la NEA con formato incorrecto",
+  "Malformed NEA PSI request time": "Hora de solicitud PSI de la NEA con formato incorrecto",
+  "No air-quality network keeps history": "Ninguna red de calidad del aire conserva historial",
   "Air quality request failed": "Falló la petición de calidad del aire",
   "ECCC request timed out": "La petición a ECCC agotó el tiempo de espera",
   "Malformed AQHI station response": "Respuesta de estaciones AQHI mal formada",
