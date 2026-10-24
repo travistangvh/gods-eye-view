@@ -18,7 +18,7 @@ export function createSceneCaption(doc = globalThis.document) {
     Object.assign(element.style, {
       position: 'fixed',
       left: '50%',
-      bottom: '7%',
+      bottom: 'max(130px, 16%)', // clear of the bottom dock
       transform: 'translateX(-50%)',
       maxWidth: 'min(80vw, 900px)',
       padding: '10px 18px',
