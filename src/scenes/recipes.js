@@ -639,7 +639,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
     'ais-live-vessels',
     'flights',
   ],
-  installAlongsideSceneId: 'omniscience-pullback',
+  installAlongsideSceneId: 'bhote-koshi-nepal-scene',
   installAlongsideFallbackSceneId: 'flights-radar',
   post: {
     bloom: 0,
@@ -865,6 +865,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         interactions: [
           {
             id: 'watch-euronews-marina-bay',
+            // i18n-ignore: card label stored in the scene
             label: 'Watch: Euronews, Marina Bay Sands nearly hidden',
             target: { packId: 'videos', featureId: 'euronews-marina-bay' },
             action: {
@@ -875,6 +876,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           },
           {
             id: 'watch-cgtn-skyline',
+            // i18n-ignore: card label stored in the scene
             label: 'Watch: CGTN live views of the smog-shrouded skyline',
             target: { packId: 'videos', featureId: 'cgtn-skyline' },
             action: {
@@ -910,6 +912,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         interactions: [
           {
             id: 'watch-euronews-palangkaraya',
+            // i18n-ignore: card label stored in the scene
             label: 'Watch: Euronews, aerial view of Palangkaraya',
             target: { packId: 'videos', featureId: 'euronews-palangkaraya' },
             action: {
@@ -967,6 +970,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         interactions: [
           {
             id: 'watch-cgtn-skyline',
+            // i18n-ignore: card label stored in the scene
             label: 'Watch: CGTN live views of the smog-shrouded skyline',
             target: { packId: 'videos', featureId: 'cgtn-skyline' },
             action: {
