@@ -1,5 +1,9 @@
 import { readResponseJsonCapped } from '../../sources/httpBody.js';
-import { normalizeAqhiStations, normalizeAqhiObservations } from './model.js';
+import {
+  normalizeAqhiStations,
+  normalizeAqhiObservations,
+  normalizeNeaPsi,
+} from './model.js';
 
 // A portable export (package.json): no i18n here. Failures stay English data;
 // the Layers panel and the Weather card show them translated.
@@ -105,6 +109,81 @@ export function createEcccAirQualitySource({
       if (!readings)
         throw new Error(msg('Malformed AQHI observation response'));
       return readings;
+    },
+  };
+}
+
+const NEA_PSI_URL = 'https://api.data.gov.sg/v1/environment/psi';
+/** The feed is a few KB; anything past this is not the PSI response. */
+const NEA_MAX_RESPONSE_BYTES = 256 * 1024;
+
+/**
+ * Request and validate the NEA (Singapore) 24-hour PSI before it can replace
+ * displayed readings. Keyless; the data.gov.sg API allows browser requests.
+ *
+ * @param {object} [options]
+ * @param {Function} [options.fetchImpl] - Injected fetch, for tests.
+ * @param {() => number} [options.now] - Clock seam, for tests.
+ * @param {number} [options.timeoutMs=15000] - Request deadline.
+ * @returns {{getSnapshot: Function}}
+ */
+export function createNeaAirQualitySource({
+  fetchImpl = (...args) => globalThis.fetch(...args),
+  now = () => Date.now(),
+  timeoutMs = 15_000,
+} = {}) {
+  return {
+    async getSnapshot({ signal } = {}) {
+      const controller = new AbortController();
+      const abort = () => controller.abort(signal.reason);
+      signal?.addEventListener('abort', abort, { once: true });
+      const timer = setTimeout(
+        () => controller.abort(new Error(msg('NEA request timed out'))),
+        timeoutMs,
+      );
+      try {
+        signal?.throwIfAborted();
+        const response = await fetchImpl(NEA_PSI_URL, {
+          headers: { Accept: 'application/json' },
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error(`NEA HTTP ${response.status}`);
+        const payload = await readResponseJsonCapped(
+          response,
+          NEA_MAX_RESPONSE_BYTES,
+          controller.signal,
+        );
+        const readings = normalizeNeaPsi(payload, now());
+        if (!readings) throw new Error(msg('Malformed NEA PSI response'));
+        return readings;
+      } finally {
+        clearTimeout(timer);
+        signal?.removeEventListener('abort', abort);
+      }
+    },
+  };
+}
+
+/**
+ * Merge several air-quality networks into one snapshot. A network that fails
+ * is left out while another answers; if every network fails, the first error
+ * is thrown so the layer reports it rather than showing an empty feed as live.
+ *
+ * @param {Array<{getSnapshot: Function}>} sources
+ * @returns {{getSnapshot: Function}}
+ */
+export function createCombinedAirQualitySource(sources) {
+  return {
+    async getSnapshot(options) {
+      const results = await Promise.allSettled(
+        sources.map((source) => source.getSnapshot(options)),
+      );
+      options?.signal?.throwIfAborted();
+      const ok = results.filter((result) => result.status === 'fulfilled');
+      if (ok.length === 0) throw results[0].reason;
+      return ok
+        .flatMap((result) => result.value)
+        .sort((a, b) => b.value - a.value || a.id.localeCompare(b.id));
     },
   };
 }

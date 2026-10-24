@@ -45,6 +45,31 @@ export const AIR_QUALITY_BANDS = Object.freeze([
     risk: msg('Very High health risk'),
     color: '#c1121f',
   }),
+  // Singapore's PSI bands. 'moderate' above is shared with them.
+  Object.freeze({
+    id: 'good',
+    label: msg('Good'),
+    risk: msg('Good air quality'),
+    color: '#2ecc71',
+  }),
+  Object.freeze({
+    id: 'unhealthy',
+    label: msg('Unhealthy'),
+    risk: msg('Unhealthy air quality'),
+    color: '#f77f00',
+  }),
+  Object.freeze({
+    id: 'very-unhealthy',
+    label: msg('Very Unhealthy'),
+    risk: msg('Very unhealthy air quality'),
+    color: '#9d0208',
+  }),
+  Object.freeze({
+    id: 'hazardous',
+    label: msg('Hazardous'),
+    risk: msg('Hazardous air quality'),
+    color: '#5c0a2e',
+  }),
 ]);
 
 const BAND_BY_ID = new Map(AIR_QUALITY_BANDS.map((band) => [band.id, band]));
@@ -115,12 +140,35 @@ export const AIR_QUALITY_PROVIDERS = Object.freeze({
     label: msg('Air quality'),
     network: 'Environment and Climate Change Canada',
     coverage: msg('Canada only · ECCC AQHI network'),
+    bandIds: Object.freeze(['low', 'moderate', 'high', 'very-high']),
     /** ECCC's published band thresholds, evaluated in order. */
     bands: Object.freeze([
       Object.freeze({ id: 'low', max: 3 }),
       Object.freeze({ id: 'moderate', max: 6 }),
       Object.freeze({ id: 'high', max: 10 }),
       Object.freeze({ id: 'very-high', max: Infinity }),
+    ]),
+  }),
+  nea: Object.freeze({
+    id: 'nea',
+    scale: 'PSI',
+    label: msg('Air quality'),
+    network: 'National Environment Agency, Singapore',
+    coverage: msg('Singapore only · NEA PSI, five regions'),
+    bandIds: Object.freeze([
+      'good',
+      'moderate',
+      'unhealthy',
+      'very-unhealthy',
+      'hazardous',
+    ]),
+    /** The published 24-hour PSI descriptors. */
+    bands: Object.freeze([
+      Object.freeze({ id: 'good', max: 50 }),
+      Object.freeze({ id: 'moderate', max: 100 }),
+      Object.freeze({ id: 'unhealthy', max: 200 }),
+      Object.freeze({ id: 'very-unhealthy', max: 300 }),
+      Object.freeze({ id: 'hazardous', max: Infinity }),
     ]),
   }),
 });
@@ -285,6 +333,67 @@ export function normalizeAqhiObservations(geojson, stations, now = Date.now()) {
     });
   }
   return [...newest.values()].sort(
+    (a, b) => b.value - a.value || a.stationId.localeCompare(b.stationId),
+  );
+}
+
+/**
+ * Turn the NEA 24-hour PSI feed (data.gov.sg) into one reading per region.
+ *
+ * The feed lists five regions with a label location each, and one hourly
+ * snapshot of readings. Atomic: a structurally broken response returns null so
+ * the caller keeps its last readings. A region without a usable value is
+ * skipped, and a snapshot past OBSERVATION_MAX_AGE_MS yields no readings.
+ *
+ * @param {object} payload - Response of `environment/psi`.
+ * @param {number} [now=Date.now()] - Clock seam for tests.
+ * @returns {Array<object>|null}
+ */
+export function normalizeNeaPsi(payload, now = Date.now()) {
+  if (!Array.isArray(payload?.region_metadata)) return null;
+  if (!Array.isArray(payload?.items)) return null;
+  const provider = AIR_QUALITY_PROVIDERS.nea;
+  const item = payload.items[0];
+  if (!item) return [];
+  const psi = item.readings?.psi_twenty_four_hourly;
+  if (!psi || typeof psi !== 'object') return null;
+  const pm25 = item.readings?.pm25_twenty_four_hourly;
+  const observedMs = Date.parse(item.timestamp);
+  if (!Number.isFinite(observedMs)) return null;
+  if (now - observedMs > OBSERVATION_MAX_AGE_MS) return [];
+  const readings = [];
+  for (const region of payload.region_metadata) {
+    const regionId = String(region?.name ?? '').trim();
+    const lat = Number(region?.label_location?.latitude);
+    const lon = Number(region?.label_location?.longitude);
+    if (!regionId || !Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+    const raw = psi[regionId];
+    if (raw === null || raw === undefined || raw === '') continue;
+    const value = Math.round(Number(raw));
+    if (!Number.isFinite(value) || value < 0) continue;
+    const band = bandForValue(provider.id, value);
+    const fine = Number(pm25?.[regionId]);
+    readings.push({
+      id: `${provider.id}:${regionId}`,
+      provider: provider.id,
+      scale: provider.scale,
+      value,
+      band,
+      stationId: regionId,
+      name: `Singapore ${regionId.charAt(0).toUpperCase()}${regionId.slice(1)}`,
+      zone: 'Singapore',
+      lat,
+      lon,
+      observedMs,
+      color: airQualityColor(band),
+      label: valueLabel(provider.id, value),
+      risk: bandRiskText(band),
+      note: Number.isFinite(fine)
+        ? `PM2.5 ${Math.round(fine)} µg/m³ (24-hour)`
+        : null,
+    });
+  }
+  return readings.sort(
     (a, b) => b.value - a.value || a.stationId.localeCompare(b.stationId),
   );
 }

@@ -2,11 +2,11 @@ import * as Cesium from 'cesium';
 import { msg, t, tn } from '../../i18n/index.js';
 import { translateFeedError } from '../../ui/statusText.js';
 import {
-  AIR_QUALITY_BANDS,
   AIR_QUALITY_OVERLAY_SOURCE_ID,
   AIR_QUALITY_OVERLAY_COHORT_LIMIT,
   AIR_QUALITY_OVERLAY_COLLISION_CAPACITY,
   AIR_QUALITY_PROVIDERS,
+  airQualityBandById,
   createAirQualityOverlayEntry,
   mapAnalystRecord,
   newestObservation,
@@ -15,7 +15,11 @@ import {
   selectAirQualityOverlayCohort,
 } from './model.js';
 export * from './model.js';
-export { createEcccAirQualitySource } from './source.js';
+export {
+  createCombinedAirQualitySource,
+  createEcccAirQualitySource,
+  createNeaAirQualitySource,
+} from './source.js';
 
 /** Station markers are a point reading, not an extent. */
 const STATION_MARKER_RADIUS_M = 6_000;
@@ -56,7 +60,7 @@ export function createAirQualityLayer({ source, overlayHost } = {}) {
     id: 'air-quality',
     name: 'Air quality',
     icon: '◍',
-    source: 'ECCC MSC GeoMet',
+    source: 'ECCC MSC GeoMet · NEA data.gov.sg',
     updateInterval: 1_200_000,
 
     init(viewer) {
@@ -210,8 +214,11 @@ export function createAirQualityLayer({ source, overlayHost } = {}) {
      * the rest. Coverage is stated plainly because this layer is not global.
      */
     getRowControls() {
-      const provider = AIR_QUALITY_PROVIDERS.eccc;
       const inView = readingsInView(_readings, viewRectangle(), READOUT_LIMIT);
+      // The readout speaks for the network of the worst reading in view, and
+      // falls back to ECCC when nothing is in view.
+      const provider =
+        AIR_QUALITY_PROVIDERS[inView[0]?.provider] ?? AIR_QUALITY_PROVIDERS.eccc;
       const newest = _readings.reduce(
         (max, reading) => Math.max(max, reading.observedMs || 0),
         0,
@@ -239,10 +246,10 @@ export function createAirQualityLayer({ source, overlayHost } = {}) {
                 ),
           units: provider.scale,
         },
-        legend: AIR_QUALITY_BANDS.map((band) => ({
-          color: band.color,
-          label: t(band.label),
-        })),
+        legend: provider.bandIds.map((bandId) => {
+          const band = airQualityBandById(bandId);
+          return { color: band.color, label: t(band.label) };
+        }),
         legendCategorical: true,
         list: {
           ariaLabel: t('Highest air-quality readings in view'),
