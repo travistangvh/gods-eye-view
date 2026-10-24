@@ -2963,6 +2963,7 @@
   "More": "Más",
   "Panels": "Paneles",
   "Fire footage by location": "Imágenes del fuego por ubicación",
-  "{count} fire detections that day · NASA VIIRS": "{count} detecciones de incendios ese día · NASA VIIRS",
+  "No fires detected yet · NASA VIIRS": "Aún no se detectan incendios · NASA VIIRS",
+  "{count} fire detections a day (7-day average) · about {area} ha burned since Jul 1 (satellite estimate)": "{count} detecciones de incendios al día (media de 7 días) · unas {area} ha quemadas desde el 1 de julio (estimación por satélite)",
   "PM2.5 in {place}: {value} µg/m³ · CAMS model": "PM2.5 en {place}: {value} µg/m³ · modelo CAMS"
 }

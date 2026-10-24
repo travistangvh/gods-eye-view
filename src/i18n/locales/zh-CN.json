@@ -2829,6 +2829,7 @@
   "More": "更多",
   "Panels": "面板",
   "Fire footage by location": "按地点显示的火灾画面",
-  "{count} fire detections that day · NASA VIIRS": "当天火点 {count} 个 · NASA VIIRS",
+  "No fires detected yet · NASA VIIRS": "尚未探测到火点 · NASA VIIRS",
+  "{count} fire detections a day (7-day average) · about {area} ha burned since Jul 1 (satellite estimate)": "每天火点 {count} 个（7 天平均）· 7 月 1 日以来约 {area} 公顷被烧（卫星估算）",
   "PM2.5 in {place}: {value} µg/m³ · CAMS model": "{place} PM2.5：{value} 微克/立方米 · CAMS 模型"
 }

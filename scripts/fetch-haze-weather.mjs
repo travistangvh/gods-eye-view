@@ -8,14 +8,14 @@
  * public/scene-assets/singapore-haze-2026/weather.json as
  * { start, stepHours, lons, lats, steps: [{ u, v, pm25 }] } where each array
  * is row-major, north to south, west to east; u and v are m/s x 10 and pm25
- * is µg/m³. Usage: npm run weather:fetch [-- 2026-10-01 2026-10-23]
+ * is µg/m³. Usage: npm run weather:fetch [-- 2026-09-01 2026-10-23]
  */
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [from = '2026-10-01', to = '2026-10-23'] = process.argv.slice(2);
+const [from = '2026-09-01', to = '2026-10-23'] = process.argv.slice(2);
 const STEP_HOURS = 3;
 const lons = Array.from({ length: 26 }, (_, i) => 95 + i);
 const lats = Array.from({ length: 23 }, (_, i) => 15 - i);

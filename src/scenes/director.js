@@ -1827,6 +1827,10 @@ export class SceneDirector {
 
     const startSceneId =
       sceneId || this._selectedSceneId || this._project.scenes[0]?.id;
+    // A built-in scene told as one story stops at its end instead of running
+    // on into the next scene.
+    if (SCENE_RECIPES.find((recipe) => recipe.id === startSceneId)?.playsAlone)
+      single = true;
     let queue = this._buildPlaybackQueue(startSceneId, { single });
     if (afterShotId !== null) {
       const index = queue.findIndex(

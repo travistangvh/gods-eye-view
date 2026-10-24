@@ -130,6 +130,38 @@ export function selectFires(fires, { bbox = null, cell = 0 } = {}) {
   return [...merged.values()].sort((a, b) => a[2] - b[2]);
 }
 
+/** Hectares one VIIRS 375 m pixel covers. */
+const PIXEL_HECTARES = 14.06;
+/** About 375 m in degrees, to count each burned pixel once. */
+const PIXEL_DEGREES = 0.00337;
+
+/**
+ * Running total of hectares burned, per day: every 375 m pixel with a
+ * detection since the data began counts once. A satellite estimate: a
+ * pixel is counted whole even when only part of it burned.
+ */
+export function burnedHectaresByDay(fires, days, bbox = null) {
+  const seen = new Set();
+  const total = new Array(days).fill(0);
+  let index = 0;
+  for (let day = 0; day < days; day++) {
+    while (index < fires.length && fires[index][2] <= day) {
+      const [lat, lon] = fires[index++];
+      if (bbox && !(lon >= bbox[0] && lat >= bbox[1] && lon <= bbox[2] && lat <= bbox[3])) continue;
+      seen.add(`${Math.round(lat / PIXEL_DEGREES)},${Math.round(lon / PIXEL_DEGREES)}`);
+    }
+    total[day] = seen.size * PIXEL_HECTARES;
+  }
+  return total;
+}
+
+/** Mean detections per day over the week ending on `day`. */
+export function weeklyAverage(counts, day) {
+  let sum = 0;
+  for (let i = day - 6; i <= day; i++) sum += counts.get(i) || 0;
+  return sum / 7;
+}
+
 /** Detections per day inside `bbox`, before any merging. */
 export function dailyCounts(fires, bbox = null) {
   const counts = new Map();
@@ -620,11 +652,12 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
       selectionCache.set(key, {
         fires: selectFires(data.fires, { bbox: story.bbox, cell: story.cell }),
         counts: dailyCounts(data.fires, story.bbox),
+        burned: burnedHectaresByDay(data.fires, data.days, story.bbox),
       });
     const selection = selectionCache.get(key);
     // A story can leave the fires out, e.g. a close view of a city.
     const fires = story.fires === false ? [] : selection.fires;
-    const { counts } = selection;
+    const { counts, burned } = selection;
     const timeline = buildFireTimeline(story, data.start);
     const points = new Cesium.PointPrimitiveCollection({
       blendOption: Cesium.BlendOption.TRANSLUCENT,
@@ -700,9 +733,15 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
         });
         ticker.date.textContent = dateLabel;
         if (!story.haze?.readout)
-          ticker.count.textContent = t('{count} fire detections that day · NASA VIIRS', {
-            count: (counts.get(today) || 0).toLocaleString(),
-          });
+          ticker.count.textContent =
+            today < 0
+              ? t('No fires detected yet · NASA VIIRS')
+              : t('{count} fire detections a day (7-day average) · about {area} ha burned since Jul 1 (satellite estimate)', {
+                  count: Math.round(weeklyAverage(counts, today)).toLocaleString(),
+                  area: Math.round(burned[Math.min(today, burned.length - 1)]).toLocaleString(undefined, {
+                    maximumSignificantDigits: 3,
+                  }),
+                });
         viewer.scene.requestRender?.();
       }
       const reading = current.haze?.update(startMs + day * DAY_MS, compression);

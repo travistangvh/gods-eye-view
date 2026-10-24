@@ -494,7 +494,7 @@ function olderHazeProjectFixture() {
   const project = createDefaultProject();
   const haze = project.scenes.find(({ id }) => id === 'singapore-haze-2026');
   haze.shots = haze.shots
-    .filter((shot) => !shot.title.startsWith('Aug-Oct'))
+    .filter((shot) => !shot.title.startsWith('Aug-Sep'))
     .map((shot) => ({ ...shot, sourcePackVersion: 1 }));
   return project;
 }
@@ -503,7 +503,7 @@ test('an installed haze scene from an older recipe is replaced with the current 
   const { director, restore } = makeDirector({ project: olderHazeProjectFixture() });
   try {
     const haze = director._project.scenes.find(({ id }) => id === 'singapore-haze-2026');
-    assert.ok(haze.shots.some(({ title }) => title.startsWith('Aug-Oct')));
+    assert.ok(haze.shots.some(({ title }) => title.startsWith('Aug-Sep')));
     const { version } = SCENE_RECIPES.find(({ id }) => id === 'singapore-haze-2026');
     assert.ok(haze.shots.every(({ sourcePackVersion }) => sourcePackVersion === version));
   } finally {
@@ -520,7 +520,7 @@ test('an installed haze scene with captured shots is left as it is', () => {
   try {
     const kept = director._project.scenes.find(({ id }) => id === 'singapore-haze-2026');
     assert.equal(kept.shots.at(-1).title, 'My shot');
-    assert.equal(kept.shots.some(({ title }) => title.startsWith('Aug-Oct')), false);
+    assert.equal(kept.shots.some(({ title }) => title.startsWith('Aug-Sep')), false);
   } finally {
     restore();
   }

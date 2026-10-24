@@ -3,12 +3,14 @@ import test from 'node:test';
 import {
   beatSeconds,
   buildFireTimeline,
+  burnedHectaresByDay,
   dailyCounts,
   dateAfter,
   dayIndex,
   flameSites,
   sampleFireTimeline,
   selectFires,
+  weeklyAverage,
 } from './sceneFireStory.js';
 import { SCENE_RECIPES } from '../scenes/recipes.js';
 
@@ -97,4 +99,32 @@ test('flames burn at the newest nearby detections, nearest first', () => {
   const sites = flameSites(fires, 10, { lat: -2.15, lon: 113.8, radiusKm: 5, max: 5 });
   assert.deepEqual(sites, [fires[0], fires[1]]);
   assert.equal(flameSites(fires, 10, { lat: -2.15, lon: 113.8, max: 1 }).length, 1);
+});
+
+test('burned area counts each satellite pixel once, as a running total', () => {
+  const fires = [
+    [-2, 110, 0],
+    [-2, 110, 1], // the same pixel again
+    [-2.01, 110, 1],
+    [5, 130, 2], // outside the box
+  ];
+  const total = burnedHectaresByDay(fires, 3, [100, -10, 120, 5]);
+  assert.equal(total.length, 3);
+  assert.ok(Math.abs(total[0] - 14.06) < 0.01);
+  assert.ok(Math.abs(total[1] - 28.12) < 0.01);
+  assert.equal(total[2], total[1]);
+});
+
+test('the weekly average smooths a single busy day', () => {
+  const counts = new Map([[10, 70]]);
+  assert.equal(weeklyAverage(counts, 10), 10);
+  assert.equal(weeklyAverage(counts, 16), 10);
+  assert.equal(weeklyAverage(counts, 17), 0);
+});
+
+test('the haze scene plays alone and its story starts before the first fires', () => {
+  const haze = SCENE_RECIPES.find(({ id }) => id === 'singapore-haze-2026');
+  assert.equal(haze.playsAlone, true);
+  assert.equal(haze.cameraPath[0].fireStory.from, '2026-06-25');
+  assert.ok(haze.cameraPath.every((shot) => shot.duration + shot.hold <= 15));
 });

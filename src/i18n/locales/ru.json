@@ -3030,6 +3030,7 @@
   "More": "Ещё",
   "Panels": "Панели",
   "Fire footage by location": "Видео пожаров по местам",
-  "{count} fire detections that day · NASA VIIRS": "Очагов пожаров за день: {count} · NASA VIIRS",
+  "No fires detected yet · NASA VIIRS": "Пожаров пока не обнаружено · NASA VIIRS",
+  "{count} fire detections a day (7-day average) · about {area} ha burned since Jul 1 (satellite estimate)": "Очагов пожаров в день: {count} (среднее за 7 дней) · с 1 июля сгорело около {area} га (спутниковая оценка)",
   "PM2.5 in {place}: {value} µg/m³ · CAMS model": "PM2.5 в {place}: {value} мкг/м³ · модель CAMS"
 }

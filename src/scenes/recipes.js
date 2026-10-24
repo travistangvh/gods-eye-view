@@ -619,10 +619,12 @@ const BHOTE_KOSHI_NEPAL_BOOTSTRAP_RECIPE = BHOTE_KOSHI_NEPAL_APPEND_RECIPE
 
 const SINGAPORE_HAZE_RECIPE = Object.freeze({
   id: 'singapore-haze-2026',
-  version: 18,
+  version: 19,
   // Browsers that installed an older version get this one on next load,
   // unless the operator has captured their own shots into the scene.
   upgradeInstalledScene: true,
+  // START plays this scene alone; it does not run on into the next one.
+  playsAlone: true,
   // Shows each shot's title over the map while it plays.
   captions: true,
   title: msg('Singapore Haze 2026'),
@@ -707,7 +709,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         // that speeds up; each beat starts on its date and may overlap.
         fireStory: {
           data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
-          from: '2026-07-01',
+          from: '2026-06-25',
           to: '2026-07-08',
           seconds: 4,
           ease: 1,
@@ -846,7 +848,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Aug-Oct: the fires spread',
+        title: 'Aug-Sep: the fires spread',
         lat: -1.0,
         lon: 110.6,
         alt: 2600000,
@@ -854,7 +856,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         pitch: -88,
         roll: 0,
         duration: 12,
-        hold: 1.8,
+        hold: 0.5,
         move: {
           from: {
             lat: -1.2,
@@ -881,9 +883,14 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         fireStory: {
           data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
           from: '2026-08-26',
-          to: '2026-10-23',
+          to: '2026-09-30',
           seconds: 10,
           cell: 0.1,
+          haze: {
+            data: '/scene-assets/singapore-haze-2026/weather.json',
+            cloud: true,
+            fadeIn: 9,
+          },
           bbox: [95, -6.5, 119.5, 6.5],
           beats: [
             {
@@ -919,36 +926,10 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
                 credit: 'tvOneNews aerial · Ogan Komering Ilir',
               },
             },
-            {
-              date: '2026-10-12',
-              lat: -2.9,
-              lon: 111.9,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Tanjung Puting National Park',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Orangutan habitat burning',
-              clip: {
-                videoId: 'mll1VmKZ18U',
-                start: 20,
-                seconds: 5,
-                // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'Liputan6 aerial · Kotawaringin Barat',
-              },
-            },
-            {
-              date: '2026-10-22',
-              lat: -2.2,
-              lon: 113.9,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Central Kalimantan peaks',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Oct 22: 8,278 detections in a day',
-              hold: 3,
-            },
           ],
         },
       },
-      // Act 2: the smoke travels. Real satellite smoke, wind and PM2.5, Oct 1-16.
+      // Act 2: the smoke travels. Real satellite smoke, wind and PM2.5.
       {
         // i18n-ignore: stored shot title, matched verbatim
         title: 'Act 2, The smoke travels: Oct 1-9',
@@ -962,9 +943,9 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         hold: 9,
         move: {
           from: {
-            lat: -1.2,
-            lon: 110.2,
-            alt: 2700000,
+            lat: -1.0,
+            lon: 110.6,
+            alt: 2600000,
             heading: 0,
             pitch: -88,
           },
@@ -990,11 +971,10 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           seconds: 12,
           ease: 1,
           cell: 0.1,
-          size: 1.5,
-          embers: false,
           haze: {
             data: '/scene-assets/singapore-haze-2026/weather.json',
             satellite: true,
+            wind: true,
             cloud: true,
             readout: {
               lat: 1.35,
@@ -1065,14 +1045,12 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           seconds: 12,
           ease: 1,
           cell: 0.1,
-          size: 1.5,
-          embers: false,
           haze: {
             data: '/scene-assets/singapore-haze-2026/weather.json',
             satellite: true,
-            wind: true,
+            wind: { hero: true },
             cloud: true,
-            satelliteOpacity: 0.55,
+            satelliteOpacity: 0.45,
             readout: {
               lat: 1.35,
               lon: 103.82,
@@ -1083,19 +1061,25 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           bbox: [95, -6.5, 119.5, 6.5],
           beats: [
             {
-              date: '2026-10-09',
-              lat: 3.15,
-              lon: 101.7,
+              at: 1.5,
+              lat: -0.6,
+              lon: 106.4,
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Kuala Lumpur',
+              label: 'The wind carries it',
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Oct 9: schools close in six states',
-              clip: {
-                videoId: 'c_OA2lTt2cE',
-                start: 0,
-                seconds: 5,
+              sub: 'About 1.5 km up, blowing from the fires to the strait',
+              hold: 7,
+              card: {
                 // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'AP · KL Tower in haze',
+                title: 'The wind is the link',
+                lines: [
+                  // i18n-ignore: scene data text, shown verbatim like shot titles
+                  'Winds about 1.5 km up carry the smoke from the burning peat across the sea.',
+                  // i18n-ignore: scene data text, shown verbatim like shot titles
+                  'In mid-October they blow it straight into the Strait of Malacca.',
+                ],
+                // i18n-ignore: scene data text, shown verbatim like shot titles
+                note: 'Wind: Open-Meteo historical forecast, 850 hPa',
               },
             },
             {
@@ -1120,24 +1104,24 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 16: across the strait into Singapore',
-        lat: 1.18,
-        lon: 103.83,
-        alt: 2500,
-        heading: 15,
-        pitch: -8,
+        title: 'Oct 9: Malaysia shuts schools',
+        lat: 2.9,
+        lon: 102.6,
+        alt: 750000,
+        heading: 0,
+        pitch: -80,
         roll: 0,
-        duration: 12,
-        hold: 0.5,
+        duration: 3,
+        hold: 7.0,
         move: {
           from: {
-            lat: 0.55,
-            lon: 103.6,
-            alt: 25000,
-            heading: 30,
-            pitch: -12,
+            lat: 1.0,
+            lon: 104.6,
+            alt: 900000,
+            heading: 0,
+            pitch: -75,
           },
-          easing: 'linear',
+          easing: 'cubic-in-out',
         },
         layers: {
           flights: false,
@@ -1147,7 +1131,144 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'local-firms': false,
           wind: false,
           'recent-imagery': false,
-          'ais-live-vessels': true,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        // Satellite fire detections light up day by day under a ticker
+        // that speeds up; each beat starts on its date and may overlap.
+        fireStory: {
+          data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
+          from: '2026-10-08',
+          to: '2026-10-09',
+          seconds: 2,
+          ease: 1,
+          cell: 0.1,
+          haze: {
+            data: '/scene-assets/singapore-haze-2026/weather.json',
+            wind: true,
+            cloud: true,
+          },
+          bbox: [95, -6.5, 119.5, 6.5],
+          beats: [
+            {
+              at: 1.0,
+              lat: 3.14,
+              lon: 101.69,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Kuala Lumpur',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Schools closed Oct 9',
+              hold: 9,
+            },
+            {
+              at: 1.6,
+              lat: 3.07,
+              lon: 101.52,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Selangor',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Schools closed Oct 9',
+              hold: 8.4,
+            },
+            {
+              at: 2.2,
+              lat: 2.93,
+              lon: 101.69,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Putrajaya',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Schools closed Oct 9',
+              hold: 7.8,
+            },
+            {
+              at: 2.8,
+              lat: 2.73,
+              lon: 101.94,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Negeri Sembilan',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Schools closed Oct 9',
+              hold: 7.2,
+            },
+            {
+              at: 3.4,
+              lat: 2.19,
+              lon: 102.25,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Melaka',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Schools closed Oct 9',
+              hold: 6.6,
+            },
+            {
+              at: 4.0,
+              lat: 1.85,
+              lon: 103.45,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Johor',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Schools closed Oct 9',
+              hold: 6,
+            },
+            {
+              at: 4.6,
+              lat: 2.79,
+              lon: 103.48,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Rompin, Pahang',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Closed where the API passes 180',
+              hold: 5.4,
+            },
+            {
+              at: 5,
+              lat: 3.16,
+              lon: 101.71,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Kuala Lumpur Tower',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Oct 9',
+              clip: {
+                videoId: 'c_OA2lTt2cE',
+                start: 0,
+                seconds: 5,
+                // i18n-ignore: scene data text, shown verbatim like shot titles
+                credit: 'AP · KL Tower in haze',
+              },
+            },
+          ],
+        },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Oct 16: across the strait into Singapore',
+        lat: 1.18,
+        lon: 103.83,
+        alt: 2500,
+        heading: 15,
+        pitch: -8,
+        roll: 0,
+        duration: 7,
+        hold: 6,
+        move: {
+          from: {
+            lat: 2.9,
+            lon: 102.6,
+            alt: 750000,
+            heading: 0,
+            pitch: -80,
+          },
+          easing: 'dive',
+        },
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': false,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
           'air-quality': false,
         },
         // Satellite fire detections light up day by day under a ticker
@@ -1172,7 +1293,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           bbox: [95, -6.5, 119.5, 6.5],
           beats: [
             {
-              at: 6,
+              at: 7,
               lat: 1.29,
               lon: 103.85,
               // i18n-ignore: scene data text, shown verbatim like shot titles
@@ -1190,18 +1311,18 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           ],
         },
       },
-      // Act 3: the reach. Who breathes it, city by city.
+      // Act 3: Singapore. One place, start to finish.
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Act 3, The reach: Oct 6-16',
-        lat: 5.0,
-        lon: 108.5,
-        alt: 5200000,
+        title: 'Act 3, Singapore: before and after',
+        lat: 1.415,
+        lon: 103.77,
+        alt: 1500,
         heading: 0,
-        pitch: -90,
+        pitch: -18,
         roll: 0,
-        duration: 4,
-        hold: 7.0,
+        duration: 5,
+        hold: 7,
         move: {
           from: {
             lat: 1.18,
@@ -1210,285 +1331,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
             heading: 15,
             pitch: -8,
           },
-          easing: 'dive',
-        },
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': false,
-          wind: false,
-          'recent-imagery': false,
-          'ais-live-vessels': false,
-          'air-quality': false,
-        },
-        // Satellite fire detections light up day by day under a ticker
-        // that speeds up; each beat starts on its date and may overlap.
-        fireStory: {
-          data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
-          from: '2026-10-06',
-          to: '2026-10-16',
-          seconds: 10,
-          ease: 1,
-          cell: 0.1,
-          size: 1.5,
-          embers: false,
-          haze: {
-            data: '/scene-assets/singapore-haze-2026/weather.json',
-            wind: true,
-            cloud: true,
-          },
-          bbox: [95, -6.5, 119.5, 6.5],
-          cities: [
-            {
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Kuala Lumpur',
-              lat: 3.14,
-              lon: 101.69,
-            },
-            {
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Johor Bahru',
-              lat: 1.49,
-              lon: 103.74,
-            },
-            {
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Singapore',
-              lat: 1.35,
-              lon: 103.82,
-            },
-            {
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Kuching',
-              lat: 1.55,
-              lon: 110.34,
-            },
-            {
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Pontianak',
-              lat: -0.03,
-              lon: 109.34,
-            },
-            {
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Palangkaraya',
-              lat: -2.21,
-              lon: 113.92,
-            },
-            {
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Pekanbaru',
-              lat: 0.51,
-              lon: 101.45,
-            },
-            {
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Palembang',
-              lat: -2.98,
-              lon: 104.78,
-            },
-            {
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Puerto Princesa',
-              lat: 9.74,
-              lon: 118.74,
-            },
-          ],
-          beats: [
-            {
-              date: '2026-10-06',
-              lat: 1.85,
-              lon: 102.93,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Batu Pahat',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Oct 6: about 200 schools close',
-              clip: {
-                videoId: 'ZSCHjeYQwzk',
-                start: 5,
-                seconds: 5,
-                // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'CNA · Batu Pahat',
-              },
-            },
-            {
-              date: '2026-10-09',
-              lat: 3.15,
-              lon: 101.7,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Kuala Lumpur',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Oct 9: schools shut in six states',
-              clip: {
-                videoId: 'c_OA2lTt2cE',
-                start: 0,
-                seconds: 5,
-                // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'AP · KL Tower in haze',
-              },
-            },
-            {
-              date: '2026-10-12',
-              lat: 9.74,
-              lon: 118.74,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'The Philippines',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Haze reached Palawan by Sep 2',
-              clip: {
-                videoId: '-KeYnUlS5cU',
-                start: 2,
-                seconds: 5,
-                // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'ABS-CBN TV Patrol · Sep 2',
-              },
-            },
-          ],
-        },
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 9: Malaysia shuts schools',
-        lat: 2.9,
-        lon: 102.6,
-        alt: 750000,
-        heading: 0,
-        pitch: -80,
-        roll: 0,
-        duration: 3,
-        hold: 6.0,
-        move: {
-          from: {
-            lat: 5.0,
-            lon: 108.5,
-            alt: 5200000,
-            heading: 0,
-            pitch: -90,
-          },
-          easing: 'dive',
-        },
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': false,
-          wind: false,
-          'recent-imagery': false,
-          'ais-live-vessels': false,
-          'air-quality': false,
-        },
-        // Satellite fire detections light up day by day under a ticker
-        // that speeds up; each beat starts on its date and may overlap.
-        fireStory: {
-          data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
-          from: '2026-10-08',
-          to: '2026-10-09',
-          seconds: 2,
-          ease: 1,
-          size: 1.5,
-          embers: false,
-          haze: {
-            data: '/scene-assets/singapore-haze-2026/weather.json',
-            cloud: true,
-          },
-          bbox: [95, -6.5, 119.5, 6.5],
-          beats: [
-            {
-              at: 1.0,
-              lat: 3.14,
-              lon: 101.69,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Kuala Lumpur',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Schools closed Oct 9',
-              hold: 8,
-            },
-            {
-              at: 1.8,
-              lat: 3.07,
-              lon: 101.52,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Selangor',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Schools closed Oct 9',
-              hold: 7.2,
-            },
-            {
-              at: 2.6,
-              lat: 2.93,
-              lon: 101.69,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Putrajaya',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Schools closed Oct 9',
-              hold: 6.4,
-            },
-            {
-              at: 3.4,
-              lat: 2.73,
-              lon: 101.94,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Negeri Sembilan',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Schools closed Oct 9',
-              hold: 5.6,
-            },
-            {
-              at: 4.2,
-              lat: 2.19,
-              lon: 102.25,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Melaka',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Schools closed Oct 9',
-              hold: 4.8,
-            },
-            {
-              at: 5.0,
-              lat: 1.85,
-              lon: 103.45,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Johor',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Schools closed Oct 9',
-              hold: 4,
-            },
-            {
-              at: 5.8,
-              lat: 2.79,
-              lon: 103.48,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Rompin, Pahang',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Closed where the API passes 180',
-              hold: 3.2,
-            },
-          ],
-        },
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 16: Singapore, before and after',
-        lat: 1.49,
-        lon: 103.77,
-        alt: 1500,
-        heading: 180,
-        pitch: -20,
-        roll: 0,
-        duration: 4,
-        hold: 8,
-        move: {
-          from: {
-            lat: 2.9,
-            lon: 102.6,
-            alt: 750000,
-            heading: 0,
-            pitch: -80,
-          },
-          easing: 'dive',
+          easing: 'cubic-in-out',
         },
         layers: {
           flights: false,
@@ -1550,38 +1393,37 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           beats: [
             {
               at: 3,
-              lat: 1.45,
+              lat: 1.445,
               lon: 103.77,
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Woodlands',
+              label: 'Woodlands Causeway',
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Oct 16: 24-hour PSI 229, the worst in a decade',
+              sub: 'Oct 16, 3pm',
               hold: 9,
             },
           ],
         },
       },
-      // Act 4: back to the source. Who is named, who protests.
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Act 4, Back to the source: Singapore names companies',
-        lat: 3.5,
-        lon: 106.2,
-        alt: 3000000,
-        heading: 180,
-        pitch: -72,
+        title: 'Oct 16-19: Singapore goes after the companies',
+        lat: 1.235,
+        lon: 103.84,
+        alt: 4000,
+        heading: 0,
+        pitch: -32,
         roll: 0,
-        duration: 4,
-        hold: 8.5,
+        duration: 5,
+        hold: 6,
         move: {
           from: {
-            lat: 1.49,
+            lat: 1.415,
             lon: 103.77,
             alt: 1500,
-            heading: 180,
-            pitch: -20,
+            heading: 0,
+            pitch: -18,
           },
-          easing: 'dive',
+          easing: 'cubic-in-out',
         },
         layers: {
           flights: false,
@@ -1600,47 +1442,27 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
           from: '2026-10-16',
           to: '2026-10-19',
-          seconds: 8,
+          seconds: 6,
           ease: 1,
-          cell: 0.1,
-          size: 1.5,
-          embers: false,
-          bbox: [95, -6.5, 119.5, 6.5],
-          arcs: [
-            {
-              at: 2.5,
-              from: {
-                lat: 1.3,
-                lon: 103.83,
-              },
-              to: {
-                lat: -1.6,
-                lon: 102.6,
-              },
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Oct 16 · 7 firms · Sumatra concessions',
-            },
-            {
-              at: 7.5,
-              from: {
-                lat: 1.3,
-                lon: 103.83,
-              },
-              to: {
-                lat: -1.6,
-                lon: 113.4,
-              },
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Oct 19 · 3 firms · Kalimantan concessions',
-            },
-          ],
-          beats: [
-            {
-              at: 3,
-              lat: 1.3,
-              lon: 103.83,
+          fires: false,
+          haze: {
+            data: '/scene-assets/singapore-haze-2026/weather.json',
+            tint: true,
+            readout: {
+              lat: 1.35,
+              lon: 103.82,
               // i18n-ignore: scene data text, shown verbatim like shot titles
               label: 'Singapore',
+            },
+          },
+          bbox: [95, -6.5, 119.5, 6.5],
+          beats: [
+            {
+              at: 1.5,
+              lat: 1.3069,
+              lon: 103.8346,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'National Environment Agency',
               // i18n-ignore: scene data text, shown verbatim like shot titles
               sub: 'Transboundary Haze Pollution Act notices',
               hold: 8,
@@ -1660,9 +1482,9 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
               },
             },
             {
-              at: 8.5,
-              lat: 1.32,
-              lon: 103.8,
+              at: 7,
+              lat: 1.29,
+              lon: 103.85,
               // i18n-ignore: scene data text, shown verbatim like shot titles
               label: 'Shanmugam, Oct 19',
               // i18n-ignore: scene data text, shown verbatim like shot titles
@@ -1678,24 +1500,25 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           ],
         },
       },
+      // Act 4: back to the source. Who is named, who protests.
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Jakarta: licences suspended',
-        lat: -6.37,
-        lon: 106.8,
-        alt: 30000,
+        title: 'Act 4, Back to the source: Singapore and Jakarta act',
+        lat: -2.0,
+        lon: 107.0,
+        alt: 3400000,
         heading: 0,
-        pitch: -50,
+        pitch: -90,
         roll: 0,
-        duration: 4,
-        hold: 5.5,
+        duration: 5,
+        hold: 6.5,
         move: {
           from: {
-            lat: 3.5,
-            lon: 106.2,
-            alt: 3000000,
-            heading: 180,
-            pitch: -72,
+            lat: 1.235,
+            lon: 103.84,
+            alt: 4000,
+            heading: 0,
+            pitch: -32,
           },
           easing: 'dive',
         },
@@ -1714,25 +1537,53 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         // that speeds up; each beat starts on its date and may overlap.
         fireStory: {
           data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
-          from: '2026-10-19',
+          from: '2026-10-16',
           to: '2026-10-23',
-          seconds: 6,
+          seconds: 10,
           ease: 1,
-          fires: false,
+          cell: 0.1,
           bbox: [95, -6.5, 119.5, 6.5],
+          arcs: [
+            {
+              at: 2.5,
+              from: {
+                lat: 1.3,
+                lon: 103.83,
+              },
+              to: {
+                lat: -1.6,
+                lon: 102.6,
+              },
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Oct 16 · 7 firms · Sumatra concessions',
+            },
+            {
+              at: 4.5,
+              from: {
+                lat: 1.3,
+                lon: 103.83,
+              },
+              to: {
+                lat: -1.6,
+                lon: 113.4,
+              },
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Oct 19 · 3 firms · Kalimantan concessions',
+            },
+          ],
           beats: [
             {
-              at: 2,
+              at: 3.5,
               lat: -6.2125,
               lon: 106.8007,
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Indonesia\'s Forestry Ministry',
+              label: 'Jakarta',
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Manggala Wanabakti, Jakarta',
-              hold: 6,
+              sub: 'Indonesia\'s Forestry Ministry',
+              hold: 8,
               card: {
                 // i18n-ignore: scene data text, shown verbatim like shot titles
-                title: 'Indonesia acts',
+                title: 'Meanwhile, Indonesia acts',
                 lines: [
                   // i18n-ignore: scene data text, shown verbatim like shot titles
                   'Sep 16 · 26 company licences suspended',
@@ -1746,7 +1597,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
               },
             },
             {
-              at: 5.5,
+              at: 7.5,
               lat: -6.17,
               lon: 106.83,
               // i18n-ignore: scene data text, shown verbatim like shot titles
@@ -1777,13 +1628,13 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         hold: 10.0,
         move: {
           from: {
-            lat: -6.37,
-            lon: 106.8,
-            alt: 30000,
+            lat: -2.0,
+            lon: 107.0,
+            alt: 3400000,
             heading: 0,
-            pitch: -50,
+            pitch: -90,
           },
-          easing: 'dive',
+          easing: 'cubic-in-out',
         },
         layers: {
           flights: false,
@@ -1805,8 +1656,6 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           seconds: 9,
           ease: 1,
           cell: 0.1,
-          size: 1.5,
-          embers: false,
           bbox: [95, -6.5, 119.5, 6.5],
           beats: [
             {

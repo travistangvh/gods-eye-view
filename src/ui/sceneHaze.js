@@ -18,6 +18,10 @@ const SATELLITE_LAYER = 'Himawari_AHI_Band3_Red_Visible_1km';
 const SATELLITE_HOUR = 3;
 const PARTICLES = 1100;
 const TRAIL = 5;
+/** Wind made the subject of a shot: denser, longer and brighter trails. */
+const HERO = { particles: 2400, trail: 9, width: 2, alpha: 0.95 };
+/** Satellite frames by URL, kept across shots so the next shot has them ready. */
+const frameCache = new Map();
 /** Fastest the wind may run, as story seconds per real second. */
 const MAX_WIND_COMPRESSION = 14000;
 
@@ -115,7 +119,12 @@ export function createSceneHaze(viewer, doc, root, spec, weather) {
   const cleanups = [];
 
   // --- satellite frames: two rectangles crossfading between days -----------
-  const frames = new Map();
+  const hero = typeof spec.wind === 'object' && spec.wind?.hero;
+  const trailLength = hero ? HERO.trail : TRAIL;
+  const began = performance.now();
+  /** 0 to 1 over the shot's `fadeIn` seconds, so haze builds up gradually. */
+  const fadeIn = () =>
+    spec.fadeIn ? Math.min(1, (performance.now() - began) / 1000 / spec.fadeIn) : 1;
   const slots = [];
   if (spec.satellite) {
     const rectangle = C.Rectangle.fromDegrees(...box);
@@ -147,12 +156,10 @@ export function createSceneHaze(viewer, doc, root, spec, weather) {
     }
   }
   function frame(day) {
-    if (!frames.has(day))
-      frames.set(
-        day,
-        loadSatelliteFrame(doc, satelliteFrameUrl(day, box)).catch(() => null),
-      );
-    return frames.get(day);
+    const url = satelliteFrameUrl(day, box);
+    if (!frameCache.has(url))
+      frameCache.set(url, loadSatelliteFrame(doc, url).catch(() => null));
+    return frameCache.get(url);
   }
   function showFrame(slot, day, alpha) {
     if (slot.day !== day) {
@@ -195,7 +202,10 @@ export function createSceneHaze(viewer, doc, root, spec, weather) {
     root.prepend(tint);
   }
 
-  const particles = Array.from({ length: spec.wind ? PARTICLES : 0 }, () => spawn());
+  const particles = Array.from(
+    { length: spec.wind ? (hero ? HERO.particles : PARTICLES) : 0 },
+    () => spawn(),
+  );
   function spawn(particle = {}) {
     particle.lon = box[0] + Math.random() * (box[2] - box[0]);
     particle.lat = box[1] + Math.random() * (box[3] - box[1]);
@@ -254,7 +264,7 @@ export function createSceneHaze(viewer, doc, root, spec, weather) {
 
   function drawWind(step, seconds, compression, occluder) {
     const ctx = fit(windCanvas);
-    ctx.lineWidth = 1.1;
+    ctx.lineWidth = hero ? HERO.width : 1.1;
     ctx.lineCap = 'round';
     for (const particle of particles) {
       particle.age += seconds;
@@ -268,12 +278,13 @@ export function createSceneHaze(viewer, doc, root, spec, weather) {
       particle.lon += ((u / 10) * metres) / (111320 * Math.cos((particle.lat * Math.PI) / 180));
       particle.lat += ((v / 10) * metres) / 110540;
       particle.trail.push([particle.lat, particle.lon]);
-      if (particle.trail.length > TRAIL) particle.trail.shift();
+      if (particle.trail.length > trailLength) particle.trail.shift();
       const points = particle.trail.map(([lat, lon]) => project(lat, lon, occluder));
       for (let i = 1; i < points.length; i++) {
         if (!points[i - 1] || !points[i]) continue;
         const fade = Math.min(1, particle.age / 0.4) * Math.min(1, (particle.life - particle.age) / 0.6);
-        ctx.strokeStyle = `rgba(235, 244, 255, ${(0.6 * i * fade) / points.length})`;
+        const strength = hero ? HERO.alpha : 0.6;
+        ctx.strokeStyle = `rgba(235, 244, 255, ${(strength * i * fade) / points.length})`;
         ctx.beginPath();
         ctx.moveTo(points[i - 1].x, points[i - 1].y);
         ctx.lineTo(points[i].x, points[i].y);
@@ -301,12 +312,16 @@ export function createSceneHaze(viewer, doc, root, spec, weather) {
         const fraction = (dayMs % 86400000) / 86400000;
         const today = day.toISOString().slice(0, 10);
         const tomorrow = new Date(day.getTime() + 86400000).toISOString().slice(0, 10);
-        const opacity = spec.satelliteOpacity ?? 0.9;
+        const opacity = (spec.satelliteOpacity ?? 0.9) * fadeIn();
         showFrame(slots[0], today, opacity * (1 - fraction));
         showFrame(slots[1], tomorrow, opacity * fraction);
         frame(new Date(day.getTime() + 2 * 86400000).toISOString().slice(0, 10));
       }
-      if (cloudCanvas) drawCloud(step, occluder);
+      if (cloudCanvas) {
+        cloudCanvas.style.opacity = String(fadeIn());
+        drawCloud(step, occluder);
+      }
+      if (windCanvas) windCanvas.style.opacity = String(fadeIn());
       if (windCanvas)
         drawWind(step, seconds, Math.min(compression, MAX_WIND_COMPRESSION), occluder);
       if (tint) {
