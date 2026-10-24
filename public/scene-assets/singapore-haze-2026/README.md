@@ -1,7 +1,10 @@
 # Singapore Haze 2026 scene
 
-A Director scene document (version 5) with 11 shots, one per key moment of the
-October 2026 transboundary haze episode. Import it from the Scenes panel.
+A built-in scene (`singapore-haze-2026` in `src/scenes/recipes.js`) with 14
+shots, one per key moment of the August to October 2026 transboundary haze.
+`videos.geojson` places three clickable points (Marina Bay, Palangkaraya, the
+city skyline). Selecting one opens a card that links to the original news
+video; the videos are not embedded or copied.
 
 Each shot switches on the existing live layers that fit the moment: Active
 Fires (`local-firms`, needs `FIRMS_MAP_KEY`), Wind, Recent Imagery, vessels and
@@ -23,6 +26,13 @@ PSI values appear in titles only. No PSI layer exists yet.
   notices to seven companies. https://asianews.network/?p=309080
 - Euronews, 15 Oct 2026: aerial footage of Palangkaraya under haze.
   https://www.euronews.com/2026/10/15/indonesias-skies-turn-apocalyptic-orange-as-smoke-blankets-singapore
+- Indonesian ministry data via databoks: 5,910 hotspots on 8 Sep 2026 (most in
+  South Sumatra) and 12,357 in 24 hours on 17 Sep (3,028 in South Sumatra).
+  Hotspots are satellite detections, not a count of fires.
+- The Star, 29 Sep 2026: firefighting focused on South Sumatra and Central
+  Kalimantan. https://www.thestar.com.my/aseanplus/aseanplus-news/2026/09/29/indonesia-focuses-firefighting-on-south-sumatra-central-kalimantan
+- CGTN, 18 Oct 2026: live views of the smog-shrouded skyline.
+  https://news.cgtn.com/news/2026-10-18/Live-Views-of-Singapore-s-smog-shrouded-skyline-1RkRm0xxao0/share_amp.html
 - Bernama, Grand Prix (9-11 Oct) held under haze.
   https://bernama.com/en/world/news.php?id=2617934
 
