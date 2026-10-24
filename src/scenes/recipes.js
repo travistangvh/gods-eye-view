@@ -619,14 +619,14 @@ const BHOTE_KOSHI_NEPAL_BOOTSTRAP_RECIPE = BHOTE_KOSHI_NEPAL_APPEND_RECIPE
 
 const SINGAPORE_HAZE_RECIPE = Object.freeze({
   id: 'singapore-haze-2026',
-  version: 7,
+  version: 15,
   // Browsers that installed an older version get this one on next load,
   // unless the operator has captured their own shots into the scene.
   upgradeInstalledScene: true,
   // Shows each shot's title over the map while it plays.
   captions: true,
   title: msg('Singapore Haze 2026'),
-  durationSec: 442.0,
+  durationSec: 350.0,
   style: 'normal',
   ui: { hidePanels: false, hudMode: 'full', safeFrame: '16:9' },
   // Only the four standard layers are declared here; each shot sets the
@@ -680,7 +680,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         heading: 0,
         pitch: -90,
         roll: 0,
-        duration: 9,
+        duration: 4,
         hold: 0.5,
         move: {
           from: {
@@ -703,14 +703,14 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'ais-live-vessels': false,
           'air-quality': false,
         },
-        // Satellite fire detections light up day by day; the ticker
-        // pauses on each beat while its clip plays.
+        // Satellite fire detections light up day by day under a ticker
+        // that speeds up; each beat starts on its date and may overlap.
         fireStory: {
           data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
           from: '2026-07-01',
           to: '2026-07-08',
-          daysPerSecond: 1,
-          delay: 1,
+          seconds: 4,
+          ease: 1,
           cell: 0.1,
           bbox: [95, -6.5, 119.5, 6.5],
           beats: [
@@ -726,8 +726,8 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         heading: 0,
         pitch: -88,
         roll: 0,
-        duration: 6,
-        hold: 48.2,
+        duration: 3,
+        hold: 11.6,
         move: {
           from: {
             lat: 0.5,
@@ -749,14 +749,13 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'ais-live-vessels': false,
           'air-quality': false,
         },
-        // Satellite fire detections light up day by day; the ticker
-        // pauses on each beat while its clip plays.
+        // Satellite fire detections light up day by day under a ticker
+        // that speeds up; each beat starts on its date and may overlap.
         fireStory: {
           data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
           from: '2026-07-09',
           to: '2026-08-25',
-          daysPerSecond: 3,
-          delay: 1.5,
+          seconds: 10,
           cell: 0.1,
           bbox: [95, -6.5, 119.5, 6.5],
           beats: [
@@ -767,11 +766,11 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
               // i18n-ignore: scene data text, shown verbatim like shot titles
               label: 'Ketapang, West Kalimantan',
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'West Kalimantan: 100+ detections a day from Jul 9',
+              sub: '100+ detections a day from Jul 9',
               clip: {
                 videoId: 'zrQRNIB45Ok',
                 start: 56,
-                seconds: 6,
+                seconds: 5,
                 portrait: true,
                 // i18n-ignore: scene data text, shown verbatim like shot titles
                 credit: 'iNews · Ketapang at night',
@@ -784,11 +783,11 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
               // i18n-ignore: scene data text, shown verbatim like shot titles
               label: 'Ogan Komering Ilir, South Sumatra',
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'South Sumatra: 100+ a day from Jul 14',
+              sub: '100+ a day from Jul 14',
               clip: {
                 videoId: 'mCd4P89s9zo',
                 start: 116,
-                seconds: 7,
+                seconds: 5,
                 // i18n-ignore: scene data text, shown verbatim like shot titles
                 credit: 'tvOneNews aerial · Ogan Komering Ilir',
               },
@@ -800,14 +799,14 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
               // i18n-ignore: scene data text, shown verbatim like shot titles
               label: 'Palangkaraya, Central Kalimantan',
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Central Kalimantan: 100+ a day from Jul 20',
+              sub: '100+ a day from Jul 20',
               clip: {
                 videoId: 'wgegfATHrj8',
                 start: 14,
-                seconds: 7,
+                seconds: 5,
                 portrait: true,
                 // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'BBC News Indonesia · a resident\'s drone, Petuk Katimpun, Aug 11',
+                credit: 'BBC News Indonesia · a resident\'s drone',
               },
             },
             {
@@ -817,11 +816,11 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
               // i18n-ignore: scene data text, shown verbatim like shot titles
               label: 'Near Nusantara, East Kalimantan',
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'East Kalimantan: 100+ a day from Aug 3',
+              sub: '100+ a day from Aug 3',
               clip: {
                 videoId: '7GVaRIqWFas',
                 start: 0,
-                seconds: 6,
+                seconds: 5,
                 // i18n-ignore: scene data text, shown verbatim like shot titles
                 credit: 'KompasTV · East Kalimantan',
               },
@@ -833,11 +832,11 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
               // i18n-ignore: scene data text, shown verbatim like shot titles
               label: 'Tanjung Jabung Timur, Jambi',
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Jambi: 100+ a day from Aug 22',
+              sub: '100+ a day from Aug 22',
               clip: {
                 videoId: 'm8gGc4DE8O8',
                 start: 56,
-                seconds: 6,
+                seconds: 5,
                 // i18n-ignore: scene data text, shown verbatim like shot titles
                 credit: 'Metro TV · soldiers on the Jambi peat',
               },
@@ -847,15 +846,183 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Aug 11: inside the fire at Petuk Katimpun, Palangkaraya',
-        lat: -2.264,
-        lon: 113.785,
-        alt: 9000,
-        heading: 20,
-        pitch: -38,
+        title: 'Aug 25-Sep 4: inside the fire at Petuk Katimpun',
+        lat: -2.165,
+        lon: 113.8,
+        alt: 450,
+        heading: 0,
+        pitch: -15,
         roll: 0,
-        duration: 10,
-        hold: 7.0,
+        duration: 6,
+        hold: 7,
+        move: {
+          from: {
+            lat: -1.2,
+            lon: 110.2,
+            alt: 2700000,
+            heading: 0,
+            pitch: -88,
+          },
+          easing: 'dive',
+        },
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': false,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        // Satellite fire detections light up day by day under a ticker
+        // that speeds up; each beat starts on its date and may overlap.
+        fireStory: {
+          data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
+          from: '2026-08-25',
+          to: '2026-09-04',
+          seconds: 12,
+          size: 7,
+          flames: { lat: -2.15, lon: 113.8, radiusKm: 5, max: 30 },
+          bbox: [113.3, -2.7, 114.4, -1.6],
+          beats: [
+            {
+              at: 7,
+              lat: -2.17,
+              lon: 113.83,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Petuk Katimpun',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'A resident filmed this fire line on Aug 11',
+              clip: {
+                videoId: 'wgegfATHrj8',
+                start: 46,
+                seconds: 6,
+                portrait: true,
+                // i18n-ignore: scene data text, shown verbatim like shot titles
+                credit: 'BBC News Indonesia · a resident\'s drone',
+              },
+            },
+          ],
+        },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Aug-Oct: the fires spread',
+        lat: -1.2,
+        lon: 110.2,
+        alt: 2700000,
+        heading: 0,
+        pitch: -88,
+        roll: 0,
+        duration: 4,
+        hold: 9.5,
+        move: {
+          from: {
+            lat: -2.165,
+            lon: 113.8,
+            alt: 450,
+            heading: 0,
+            pitch: -15,
+          },
+          easing: 'dive',
+        },
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': false,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        // Satellite fire detections light up day by day under a ticker
+        // that speeds up; each beat starts on its date and may overlap.
+        fireStory: {
+          data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
+          from: '2026-09-04',
+          to: '2026-10-23',
+          seconds: 10,
+          cell: 0.1,
+          bbox: [95, -6.5, 119.5, 6.5],
+          beats: [
+            {
+              date: '2026-09-02',
+              lat: -1.85,
+              lon: 110.25,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Ketapang declares an emergency',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Sep 2: fires in 15 of its 20 districts',
+              clip: {
+                videoId: 'zrQRNIB45Ok',
+                start: 4,
+                seconds: 4,
+                portrait: true,
+                // i18n-ignore: scene data text, shown verbatim like shot titles
+                credit: 'iNews · Ketapang',
+              },
+            },
+            {
+              date: '2026-09-15',
+              lat: -3.3,
+              lon: 105.6,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'South Sumatra peaks',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Sep 15: 1,831 detections in a day',
+              clip: {
+                videoId: 'mCd4P89s9zo',
+                start: 124,
+                seconds: 5,
+                // i18n-ignore: scene data text, shown verbatim like shot titles
+                credit: 'tvOneNews aerial · Ogan Komering Ilir',
+              },
+            },
+            {
+              date: '2026-10-12',
+              lat: -2.9,
+              lon: 111.9,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Tanjung Puting National Park',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Orangutan habitat burning',
+              clip: {
+                videoId: 'mll1VmKZ18U',
+                start: 20,
+                seconds: 5,
+                // i18n-ignore: scene data text, shown verbatim like shot titles
+                credit: 'Liputan6 aerial · Kotawaringin Barat',
+              },
+            },
+            {
+              date: '2026-10-22',
+              lat: -2.2,
+              lon: 113.9,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Central Kalimantan peaks',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Oct 22: 8,278 detections in a day',
+              hold: 3,
+            },
+          ],
+        },
+      },
+      // Act 2: the smoke travels. Real satellite smoke, wind and PM2.5, Oct 1-16.
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Act 2, The smoke travels: Oct 1-9',
+        lat: 1.0,
+        lon: 107.0,
+        alt: 3600000,
+        heading: 0,
+        pitch: -90,
+        roll: 0,
+        duration: 3,
+        hold: 9,
         move: {
           from: {
             lat: -1.2,
@@ -877,32 +1044,44 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'ais-live-vessels': false,
           'air-quality': false,
         },
-        // Satellite fire detections light up day by day; the ticker
-        // pauses on each beat while its clip plays.
+        // Satellite fire detections light up day by day under a ticker
+        // that speeds up; each beat starts on its date and may overlap.
         fireStory: {
           data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
-          from: '2026-08-01',
-          to: '2026-08-11',
-          daysPerSecond: 2,
-          delay: 3,
-          size: 11,
-          bbox: [113.3, -2.7, 114.4, -1.6],
+          from: '2026-10-01',
+          to: '2026-10-09',
+          seconds: 12,
+          ease: 1,
+          cell: 0.1,
+          size: 1.5,
+          embers: false,
+          haze: {
+            data: '/scene-assets/singapore-haze-2026/weather.json',
+            satellite: true,
+            cloud: true,
+            readout: {
+              lat: 1.35,
+              lon: 103.82,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Singapore',
+            },
+          },
+          bbox: [95, -6.5, 119.5, 6.5],
           beats: [
             {
-              date: '2026-08-11',
-              lat: -2.17,
-              lon: 113.83,
+              date: '2026-10-05',
+              lat: -2.21,
+              lon: 113.92,
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Petuk Katimpun',
+              label: 'Palangkaraya',
               // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: '500 m from homes, a resident says',
+              sub: 'PM2.5 passes 1,200 µg/m³ by Oct 10',
               clip: {
-                videoId: 'wgegfATHrj8',
-                start: 46,
-                seconds: 8,
-                portrait: true,
+                videoId: '_PNM6F5oRi0',
+                start: 106,
+                seconds: 6,
                 // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'BBC News Indonesia · a resident\'s drone, Aug 11',
+                credit: 'Kompas.com drone · Palangkaraya under an orange sky',
               },
             },
           ],
@@ -910,22 +1089,116 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Aug-Oct: the peat keeps burning around Palangkaraya',
-        lat: -2.25,
-        lon: 113.72,
-        alt: 11000,
-        heading: 55,
-        pitch: -36,
+        title: 'Oct 9-15: the wind carries it to the strait',
+        lat: 1.0,
+        lon: 104.6,
+        alt: 900000,
+        heading: 0,
+        pitch: -75,
         roll: 0,
-        duration: 24,
-        hold: 2.8,
+        duration: 4,
+        hold: 8,
         move: {
           from: {
-            lat: -2.264,
-            lon: 113.785,
-            alt: 9000,
-            heading: 20,
-            pitch: -38,
+            lat: 1.0,
+            lon: 107.0,
+            alt: 3600000,
+            heading: 0,
+            pitch: -90,
+          },
+          easing: 'dive',
+        },
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': false,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        // Satellite fire detections light up day by day under a ticker
+        // that speeds up; each beat starts on its date and may overlap.
+        fireStory: {
+          data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
+          from: '2026-10-09',
+          to: '2026-10-15',
+          seconds: 12,
+          ease: 1,
+          cell: 0.1,
+          size: 1.5,
+          embers: false,
+          haze: {
+            data: '/scene-assets/singapore-haze-2026/weather.json',
+            satellite: true,
+            wind: true,
+            cloud: true,
+            satelliteOpacity: 0.55,
+            readout: {
+              lat: 1.35,
+              lon: 103.82,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Singapore',
+            },
+          },
+          bbox: [95, -6.5, 119.5, 6.5],
+          beats: [
+            {
+              date: '2026-10-09',
+              lat: 3.15,
+              lon: 101.7,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Kuala Lumpur',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Oct 9: schools close in six states',
+              clip: {
+                videoId: 'c_OA2lTt2cE',
+                start: 0,
+                seconds: 5,
+                // i18n-ignore: scene data text, shown verbatim like shot titles
+                credit: 'AP · KL Tower in haze',
+              },
+            },
+            {
+              date: '2026-10-12',
+              lat: 1.46,
+              lon: 103.76,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Johor Bahru',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Singapore vanishes across the strait',
+              clip: {
+                videoId: 'eKYM6vjLWOA',
+                start: 10,
+                seconds: 6,
+                portrait: true,
+                // i18n-ignore: scene data text, shown verbatim like shot titles
+                credit: 'The Straits Times · Oct 10',
+              },
+            },
+          ],
+        },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Oct 16: across the strait into Singapore',
+        lat: 1.18,
+        lon: 103.83,
+        alt: 2500,
+        heading: 15,
+        pitch: -8,
+        roll: 0,
+        duration: 12,
+        hold: 0.5,
+        move: {
+          from: {
+            lat: 0.55,
+            lon: 103.6,
+            alt: 25000,
+            heading: 30,
+            pitch: -12,
           },
           easing: 'linear',
         },
@@ -937,174 +1210,47 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'local-firms': false,
           wind: false,
           'recent-imagery': false,
-          'ais-live-vessels': false,
-          'air-quality': false,
-        },
-        // Satellite fire detections light up day by day; the ticker
-        // pauses on each beat while its clip plays.
-        fireStory: {
-          data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
-          from: '2026-08-12',
-          to: '2026-10-22',
-          daysPerSecond: 4,
-          size: 11,
-          bbox: [113.3, -2.7, 114.4, -1.6],
-          beats: [
-            {
-              date: '2026-10-10',
-              lat: -2.22,
-              lon: 113.88,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Palangkaraya peat',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Fires smoulder under the surface for weeks',
-              clip: {
-                videoId: '06tKmOfyYys',
-                start: 4,
-                seconds: 8,
-                // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'KompasTV drone · Palangkaraya',
-              },
-            },
-          ],
-        },
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Aug-Oct: the fires spread',
-        lat: -1.2,
-        lon: 110.2,
-        alt: 2700000,
-        heading: 0,
-        pitch: -88,
-        roll: 0,
-        duration: 14,
-        hold: 28.5,
-        move: {
-          from: {
-            lat: -2.25,
-            lon: 113.72,
-            alt: 11000,
-            heading: 55,
-            pitch: -36,
-          },
-          easing: 'cubic-in-out',
-        },
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': false,
-          wind: false,
-          'recent-imagery': false,
-          'ais-live-vessels': false,
-          'air-quality': false,
-        },
-        // Satellite fire detections light up day by day; the ticker
-        // pauses on each beat while its clip plays.
-        fireStory: {
-          data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
-          from: '2026-08-22',
-          to: '2026-10-23',
-          daysPerSecond: 4,
-          cell: 0.1,
-          bbox: [95, -6.5, 119.5, 6.5],
-          beats: [
-            {
-              date: '2026-09-02',
-              lat: -1.85,
-              lon: 110.25,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Ketapang declares an emergency',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Sep 2: fires in 15 of its 20 districts',
-              clip: {
-                videoId: 'zrQRNIB45Ok',
-                start: 4,
-                seconds: 5,
-                portrait: true,
-                // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'iNews · Ketapang',
-              },
-            },
-            {
-              date: '2026-09-15',
-              lat: -3.3,
-              lon: 105.6,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'South Sumatra peaks',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Sep 15: 1,831 detections in a day',
-              clip: {
-                videoId: 'mCd4P89s9zo',
-                start: 124,
-                seconds: 7,
-                // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'tvOneNews aerial · Ogan Komering Ilir',
-              },
-            },
-            {
-              date: '2026-10-12',
-              lat: -2.9,
-              lon: 111.9,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Tanjung Puting National Park',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Orangutan habitat burning',
-              clip: {
-                videoId: 'mll1VmKZ18U',
-                start: 20,
-                seconds: 7,
-                // i18n-ignore: scene data text, shown verbatim like shot titles
-                credit: 'Liputan6 aerial · Kotawaringin Barat',
-              },
-            },
-            {
-              date: '2026-10-22',
-              lat: -2.2,
-              lon: 113.9,
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              label: 'Central Kalimantan peaks',
-              // i18n-ignore: scene data text, shown verbatim like shot titles
-              sub: 'Oct 22: 8,278 detections in a day',
-              hold: 4,
-            },
-          ],
-        },
-      },
-      // Act 2: the crossing. One low flight north toward Singapore.
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Act 2, The crossing: the smoke heads north to Singapore',
-        lat: 0.2,
-        lon: 104.0,
-        alt: 30000,
-        heading: 350,
-        pitch: -20,
-        roll: 0,
-        duration: 10,
-        hold: 14,
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': false,
-          wind: true,
-          'recent-imagery': false,
           'ais-live-vessels': true,
           'air-quality': false,
         },
-        videoFeature: {
-          videoId: 'YI9P0Zmd7EE',
-          start: 34,
-          // i18n-ignore: scene data text, shown verbatim like shot titles
-          title: 'The smoke crosses the strait',
-          // i18n-ignore: scene data text, shown verbatim like shot titles
-          summary: 'Prevailing winds carry the smoke from Sumatra north across the Strait of Malacca to Singapore and Malaysia. The wind shown is today\'s.',
-          // i18n-ignore: scene data text, shown verbatim like shot titles
-          label: 'CNA Explains · Sep 19',
+        // Satellite fire detections light up day by day under a ticker
+        // that speeds up; each beat starts on its date and may overlap.
+        fireStory: {
+          data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
+          from: '2026-10-15',
+          to: '2026-10-16',
+          seconds: 11,
+          ease: 1,
+          embers: false,
+          haze: {
+            data: '/scene-assets/singapore-haze-2026/weather.json',
+            tint: true,
+            readout: {
+              lat: 1.35,
+              lon: 103.82,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Singapore',
+            },
+          },
+          bbox: [95, -6.5, 119.5, 6.5],
+          beats: [
+            {
+              at: 6,
+              lat: 1.29,
+              lon: 103.85,
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              label: 'Singapore',
+              // i18n-ignore: scene data text, shown verbatim like shot titles
+              sub: 'Oct 16: 24-hour PSI 229, the worst in a decade',
+              clip: {
+                videoId: '2l7irQkN2b0',
+                start: 10,
+                seconds: 6,
+                // i18n-ignore: scene data text, shown verbatim like shot titles
+                credit: 'The Star / Reuters · the skyline fades',
+              },
+            },
+          ],
         },
       },
       // Act 3: the reach. One featured clip per place, with what happened there.

@@ -151,3 +151,32 @@ test('unknown anchors, duplicate IDs, mixed references, bad easing and unspecifi
     /unsupported field/,
   );
 });
+
+test('a dive centres early, zooms at a steady log rate and tilts last', () => {
+  const move = {
+    from: { lat: -1.2, lon: 110.2, alt: 2_700_000, heading: 0, pitch: -88, roll: 0 },
+    to: { lat: -2.17, lon: 113.8, alt: 700, heading: 20, pitch: -22, roll: 0 },
+    easing: 'dive',
+  };
+  const centred = sampleCameraMove(move, 0.6);
+  assert.ok(Math.abs(centred.lat - move.to.lat) < 1e-9);
+  assert.ok(Math.abs(centred.lon - move.to.lon) < 1e-9);
+  assert.equal(centred.pitch, -88);
+  assert.equal(centred.heading, 0);
+  // Height falls monotonically, through the geometric middle.
+  const heights = [0.2, 0.4, 0.6, 0.8].map((t) => sampleCameraMove(move, t).alt);
+  heights.reduce((previous, height) => (assert.ok(height < previous), height), Infinity);
+  assert.ok(sampleCameraMove(move, 0.5).alt < Math.sqrt(2_700_000 * 700) * 1.2);
+  assert.deepEqual(sampleCameraMove(move, 1), move.to);
+  // Rising out runs the curve backwards: lift straight up, then pan.
+  const out = { from: move.to, to: move.from, easing: 'dive' };
+  const lifted = sampleCameraMove(out, 0.4);
+  assert.ok(Math.abs(lifted.lat - move.to.lat) < 1e-9);
+  assert.ok(lifted.alt > move.to.alt);
+});
+
+test('dive is an accepted easing', () => {
+  const document = fixture();
+  document.scenes[0].shots[0].move.easing = 'dive';
+  assert.doesNotThrow(() => parseSceneDocument(JSON.stringify(document)));
+});

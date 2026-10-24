@@ -74,8 +74,8 @@ export function validateSceneCameras(scene, path, version) {
     const at = `${path}.shots[${index}]`;
     optional(shot, 'move', at, (move, field) => {
       fields(move, field, ['from', 'easing']);
-      if (!['linear', 'cubic-in-out'].includes(move.easing))
-        fail(`${field}.easing`, 'expected linear or cubic-in-out');
+      if (!['linear', 'cubic-in-out', 'dive'].includes(move.easing))
+        fail(`${field}.easing`, 'expected linear, cubic-in-out or dive');
       pose(move.from, `${field}.from`, version, anchorIds, true);
       pose(shot.camera, `${at}.camera`, version, anchorIds, true);
       number(shot.durationSec, `${at}.durationSec`, 0.2, 86400, false);

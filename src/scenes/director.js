@@ -420,6 +420,10 @@ export class SceneDirector {
    * featured clip, and any fire story.
    */
   _showShotOverlays(scene, shot) {
+    // A shot's overlays start once, as its camera starts moving; announcing
+    // the same shot again after the flight must not restart its story.
+    if (this._overlayShot === shot) return;
+    this._overlayShot = shot;
     const recipe = SCENE_RECIPES.find((entry) => entry.id === scene?.id);
     if (recipe?.captions)
       this._caption?.show(displayShotTitle(shot.title, shot, scene));
@@ -434,6 +438,7 @@ export class SceneDirector {
   }
 
   _hideShotOverlays() {
+    this._overlayShot = null;
     this._caption?.hide();
     this._videoWall?.hide();
     this._fireStory?.hide();
@@ -1271,6 +1276,7 @@ export class SceneDirector {
       },
     );
     const cameraTravel = this._beginShotTravel(scene, shot, flyDuration);
+    this._showShotOverlays(scene, shot);
     try {
       // Camera motion starts synchronously before yielding. Publish the
       // trail phase immediately afterward so its clock overlaps actual
@@ -1972,6 +1978,7 @@ export class SceneDirector {
   stopScene(reason = msg('Stopped')) {
     this._setSceneMediaPlayback();
     this._interactions?.clear();
+    this._overlayShot = null;
     this._caption?.hide();
     this._videoWall?.hide();
     this._fireStory?.hide();

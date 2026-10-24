@@ -40,6 +40,7 @@
     "layer-token:check": "node scripts/check-layer-state-tokens.mjs",
     "clips:fetch": "node scripts/fetch-scene-clips.mjs",
     "fires:fetch": "node scripts/fetch-haze-fires.mjs",
+    "weather:fetch": "node scripts/fetch-haze-weather.mjs",
     "changelog": "node scripts/assemble-changelog.mjs --write",
     "changelog:check": "node scripts/assemble-changelog.mjs --check",
     "dev": "vite",

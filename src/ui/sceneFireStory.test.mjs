@@ -6,6 +6,7 @@ import {
   dailyCounts,
   dateAfter,
   dayIndex,
+  flameSites,
   sampleFireTimeline,
   selectFires,
 } from './sceneFireStory.js';
@@ -16,33 +17,44 @@ test('days count from the data start in UTC', () => {
   assert.equal(dateAfter('2026-07-01', 31), '2026-08-01');
 });
 
-test('the ticker advances, pauses for each beat, then finishes', () => {
+test('the ticker speeds up and beats start on their dates, overlapping', () => {
   const timeline = buildFireTimeline(
     {
       from: '2026-07-01',
-      to: '2026-07-21',
-      daysPerSecond: 2,
+      to: '2026-07-17',
+      seconds: 8,
+      ease: 2,
       delay: 1,
       beats: [
         { date: '2026-07-05', clip: { seconds: 6 } },
-        { hold: 3 },
-        { date: '2026-07-11', hold: 2 },
+        { date: '2026-07-17', hold: 3 },
+        { at: 0.5 },
       ],
     },
     '2026-07-01',
   );
-  // delay 1 + 4 days at 2/s + beat 7 + beat 4 + 6 days + beat 3 + 10 days
-  assert.equal(timeline.total, 1 + 2 + 7 + 4 + 3 + 3 + 5);
-  assert.deepEqual(sampleFireTimeline(timeline, 0.5), { day: 0, beat: null });
-  assert.deepEqual(sampleFireTimeline(timeline, 2), { day: 2, beat: null });
-  assert.deepEqual(sampleFireTimeline(timeline, 4), { day: 4, beat: 0 });
-  assert.deepEqual(sampleFireTimeline(timeline, 11), { day: 4, beat: 1 });
-  assert.deepEqual(sampleFireTimeline(timeline, 100), { day: 20, beat: null });
+  // Day 4 of 16 with ease 2 is reached at sqrt(1/4) of the run: 1 + 4 s.
+  assert.deepEqual(timeline.beats, [
+    { start: 5, end: 11 },
+    { start: 9, end: 12 },
+    { start: 0.5, end: 4.5 },
+  ]);
+  assert.equal(timeline.total, 12);
+  assert.deepEqual(sampleFireTimeline(timeline, 0.5), { day: 0, started: [2], playing: [2] });
+  // Halfway through the run, a quarter of the days have passed.
+  assert.equal(sampleFireTimeline(timeline, 5).day, 4);
+  assert.deepEqual(sampleFireTimeline(timeline, 10), {
+    day: 16,
+    started: [0, 1, 2],
+    playing: [0, 1],
+  });
+  assert.equal(sampleFireTimeline(timeline, 100).day, 16);
 });
 
-test('a beat holds for its clip plus a moment to settle', () => {
-  assert.equal(beatSeconds({ clip: { seconds: 6 } }), 7);
-  assert.equal(beatSeconds({ hold: 4 }), 5);
+test('a beat lasts for its clip, or its hold', () => {
+  assert.equal(beatSeconds({ clip: { seconds: 6 } }), 6);
+  assert.equal(beatSeconds({ hold: 3 }), 3);
+  assert.equal(beatSeconds({}), 4);
 });
 
 test('fires are filtered to a box and merged per cell and day', () => {
@@ -72,4 +84,17 @@ test('every haze fire story has clips with an exact length', () => {
         assert.match(beat.clip.videoId, /^[A-Za-z0-9_-]{11}$/);
         assert.ok(beat.clip.seconds > 0 && beat.clip.seconds <= 10);
       }
+});
+
+test('flames burn at the newest nearby detections, nearest first', () => {
+  const fires = [
+    [-2.15, 113.8, 10, 5], // here, today
+    [-2.16, 113.8, 9, 5], // ~1 km, yesterday
+    [-2.15, 113.8, 7, 5], // here, but out by now
+    [-2.5, 113.8, 10, 5], // ~39 km away
+    [-2.151, 113.8, 11, 5], // tomorrow
+  ];
+  const sites = flameSites(fires, 10, { lat: -2.15, lon: 113.8, radiusKm: 5, max: 5 });
+  assert.deepEqual(sites, [fires[0], fires[1]]);
+  assert.equal(flameSites(fires, 10, { lat: -2.15, lon: 113.8, max: 1 }).length, 1);
 });

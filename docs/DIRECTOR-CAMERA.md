@@ -51,8 +51,11 @@ heading 0, pitch −35 and roll 0 degrees.
 
 An explicit move requires `move.from`, `move.easing`, `durationSec` and `holdSec`.
 Its duration is 0.2–86,400 seconds; the hold is 0–86,400 seconds. The destination
-is not copied into another field. `linear` and `cubic-in-out` are the supported
-easings. A shot without `move` retains the existing ordinary flight, even in a
+is not copied into another field. `linear`, `cubic-in-out` and `dive` are the
+supported easings. A `dive` zooms in like scrolling: it centres over the
+destination in the first 60% of the move, lowers the height at a steady
+logarithmic rate, and turns to the destination's heading and pitch only in the
+last 40%. A `dive` to a higher destination runs the same curve backwards. A shot without `move` retains the existing ordinary flight, even in a
 version-4 file. Its destination may also reference an anchor.
 
 Capture continues to create ordinary camera-pose shots. Update Shot stores the

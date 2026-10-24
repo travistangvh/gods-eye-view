@@ -3030,5 +3030,6 @@
   "More": "Ещё",
   "Panels": "Панели",
   "Fire footage by location": "Видео пожаров по местам",
-  "{count} fire detections that day · NASA VIIRS": "Очагов пожаров за день: {count} · NASA VIIRS"
+  "{count} fire detections that day · NASA VIIRS": "Очагов пожаров за день: {count} · NASA VIIRS",
+  "PM2.5 in {place}: {value} µg/m³ · CAMS model": "PM2.5 в {place}: {value} мкг/м³ · модель CAMS"
 }

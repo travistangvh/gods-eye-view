@@ -2963,5 +2963,6 @@
   "More": "Más",
   "Panels": "Paneles",
   "Fire footage by location": "Imágenes del fuego por ubicación",
-  "{count} fire detections that day · NASA VIIRS": "{count} detecciones de incendios ese día · NASA VIIRS"
+  "{count} fire detections that day · NASA VIIRS": "{count} detecciones de incendios ese día · NASA VIIRS",
+  "PM2.5 in {place}: {value} µg/m³ · CAMS model": "PM2.5 en {place}: {value} µg/m³ · modelo CAMS"
 }
