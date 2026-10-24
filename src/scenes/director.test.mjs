@@ -466,7 +466,10 @@ test('an older default project gains the complete selectable Nepal scene once', 
     assert.equal(nepal.shots.length, 25);
     assert.equal(nepal.shots[0].title, 'Global Incident Context');
     assert.equal(nepal.shots.at(-1).title, 'Final view');
-    assert.deepEqual(director._project.installedBuiltInSceneIds, ['bhote-koshi-nepal-scene']);
+    assert.deepEqual(director._project.installedBuiltInSceneIds, [
+      'bhote-koshi-nepal-scene',
+      'singapore-haze-2026',
+    ]);
   } finally {
     restore();
   }
@@ -502,7 +505,10 @@ test('an existing public default project gains Nepal without replacing authored 
       original.map(({ id, camera }) => ({ id, camera })));
     assert.equal(director._project.scenes[1].title, 'Nepal Flood Incident');
     assert.equal(director._project.scenes[1].shots.length, 25);
-    assert.deepEqual(director._project.installedBuiltInSceneIds, ['bhote-koshi-nepal-scene']);
+    assert.deepEqual(director._project.installedBuiltInSceneIds, [
+      'bhote-koshi-nepal-scene',
+      'singapore-haze-2026',
+    ]);
   } finally { restore(); }
 });
 
