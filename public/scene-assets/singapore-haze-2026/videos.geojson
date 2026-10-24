@@ -1,0 +1,44 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "euronews-marina-bay",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.8607,
+          1.2834,
+          190
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cgtn-skyline",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.851,
+          1.29,
+          120
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "euronews-palangkaraya",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.9213,
+          -2.2136,
+          60
+        ]
+      }
+    }
+  ]
+}
