@@ -30,13 +30,9 @@ test('without a document or scene the wall is a no-op', () => {
   wall.destroy();
 });
 
-test('the haze scene features one clip per place with a title and summary', () => {
+test('any featured clips in the haze scene are well formed', () => {
   const recipe = SCENE_RECIPES.find((r) => r.id === 'singapore-haze-2026');
-  const features = recipe.cameraPath
-    .filter((shot) => shot.videoFeature)
-    .map((shot) => shot.videoFeature);
-  assert.ok(features.filter((f) => f.videoId).length >= 6);
-  for (const feature of features) {
+  for (const { videoFeature: feature } of recipe.cameraPath.filter((shot) => shot.videoFeature)) {
     if (feature.videoId) assert.match(feature.videoId, /^[A-Za-z0-9_-]{11}$/);
     assert.ok(feature.title && feature.summary && feature.label);
     assert.equal(Number.isFinite(feature.lat), Number.isFinite(feature.lon));

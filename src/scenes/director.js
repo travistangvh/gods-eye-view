@@ -1276,6 +1276,8 @@ export class SceneDirector {
       },
     );
     const cameraTravel = this._beginShotTravel(scene, shot, flyDuration);
+    // Each load starts the shot's overlays afresh, even for the same shot.
+    this._overlayShot = null;
     this._showShotOverlays(scene, shot);
     try {
       // Camera motion starts synchronously before yielding. Publish the

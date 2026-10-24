@@ -3,22 +3,22 @@
  *
  * Wind is Open-Meteo's historical forecast at 850 hPa (about 1.5 km up, the
  * height the smoke travels); PM2.5 is Open-Meteo's CAMS air-quality model at
- * the surface. Both are sampled every 3 hours on a 1-degree grid over
- * Sumatra, the Malay Peninsula and Borneo. Keyless. Writes
+ * the surface. Both are sampled every 3 hours on a 1-degree grid from
+ * Sumatra and Java to Borneo and the southern Philippines. Keyless. Writes
  * public/scene-assets/singapore-haze-2026/weather.json as
  * { start, stepHours, lons, lats, steps: [{ u, v, pm25 }] } where each array
  * is row-major, north to south, west to east; u and v are m/s x 10 and pm25
- * is µg/m³. Usage: npm run weather:fetch [-- 2026-10-01 2026-10-16]
+ * is µg/m³. Usage: npm run weather:fetch [-- 2026-10-01 2026-10-23]
  */
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const [from = '2026-10-01', to = '2026-10-16'] = process.argv.slice(2);
+const [from = '2026-10-01', to = '2026-10-23'] = process.argv.slice(2);
 const STEP_HOURS = 3;
 const lons = Array.from({ length: 26 }, (_, i) => 95 + i);
-const lats = Array.from({ length: 16 }, (_, i) => 8 - i);
+const lats = Array.from({ length: 23 }, (_, i) => 15 - i);
 const points = lats.flatMap((lat) => lons.map((lon) => [lat, lon]));
 const BATCH = 100;
 

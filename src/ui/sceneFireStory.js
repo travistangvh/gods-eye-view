@@ -2,6 +2,7 @@ import * as Cesium from 'cesium';
 import { formatDate, t } from '../i18n/index.js';
 import { createSceneClipPlayer } from './sceneClips.js';
 import { createSceneHaze } from './sceneHaze.js';
+import { createStoryExtras } from './sceneStoryExtras.js';
 
 /**
  * A shot's fire story: satellite fire detections light up day by day under a
@@ -13,6 +14,10 @@ import { createSceneHaze } from './sceneHaze.js';
  * from the burning detections nearest a place, drawn on the 3D map itself.
  * A `haze` block adds satellite smoke, wind trails, the PM2.5 cloud and a haze
  * tint (see sceneHaze.js), and its `readout` replaces the detection count.
+ * `fires: false` leaves the detections out. `cities`, `compare` and `arcs`
+ * add city PM2.5 counters, a before/after
+ * card and growing arcs (see sceneStoryExtras.js). A beat may carry a text
+ * `card` instead of a clip; its lines appear one by one.
  *
  * Detections come from a file written by `npm run fires:fetch`:
  * { start: 'YYYY-MM-DD', fires: [[lat, lon, day, frp], ...] }, sorted by day.
@@ -325,6 +330,7 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
       viewer.scene.primitives.remove(run.points);
     run.flames?.destroy();
     run.haze?.destroy();
+    run.extras?.destroy();
     viewer.scene?.requestRender?.();
     run = null;
   }
@@ -399,6 +405,40 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
     marker.append(ring, dot, label);
     root.append(marker);
     return marker;
+  }
+
+  /** A pinned text card; its lines are revealed over the beat. */
+  function buildTextCard(root, beat) {
+    const card = element('figure', {
+      position: 'absolute',
+      margin: '0',
+      width: 'min(30vw, 420px)',
+      padding: '10px 14px 12px',
+      background: 'rgba(10, 12, 16, 0.92)',
+      border: '1px solid rgba(255, 170, 70, 0.9)',
+      borderRadius: '6px',
+      color: '#f4ede4',
+      font: '14px/1.4 system-ui, sans-serif',
+      opacity: '0',
+      transform: 'scale(0.9)',
+      transition: 'opacity 0.4s, transform 0.4s',
+    });
+    card.append(
+      element('div', { font: '700 16px/1.3 system-ui, sans-serif', color: '#ffd9a8' }, beat.card.title),
+    );
+    card.lines = beat.card.lines.map((text) => {
+      const line = element('div', { marginTop: '6px', opacity: '0', transition: 'opacity 0.4s' }, text);
+      card.append(line);
+      return line;
+    });
+    if (beat.card.note)
+      card.append(element('div', { marginTop: '8px', color: '#a9b4bf', font: '12px/1.35 system-ui, sans-serif' }, beat.card.note));
+    root.append(card);
+    requestAnimationFrame(() => {
+      card.style.opacity = '1';
+      card.style.transform = 'scale(1)';
+    });
+    return card;
   }
 
   /** A clip that grows from its pin to fill the screen, and back. */
@@ -581,7 +621,10 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
         fires: selectFires(data.fires, { bbox: story.bbox, cell: story.cell }),
         counts: dailyCounts(data.fires, story.bbox),
       });
-    const { fires, counts } = selectionCache.get(key);
+    const selection = selectionCache.get(key);
+    // A story can leave the fires out, e.g. a close view of a city.
+    const fires = story.fires === false ? [] : selection.fires;
+    const { counts } = selection;
     const timeline = buildFireTimeline(story, data.start);
     const points = new Cesium.PointPrimitiveCollection({
       blendOption: Cesium.BlendOption.TRANSLUCENT,
@@ -606,6 +649,8 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
     const ticker = buildTicker(current.root);
     if (story.flames) current.flames = createFlames(viewer, doc);
     if (weather) current.haze = createSceneHaze(viewer, doc, current.root, story.haze, weather);
+    if (story.cities || story.compare || story.arcs)
+      current.extras = createStoryExtras(viewer, doc, current.root, story, weather);
     const startMs = Date.parse(`${data.start}T00:00:00Z`);
     // Story seconds per real second while the ticker runs, to pace the wind.
     const compression =
@@ -661,6 +706,7 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
         viewer.scene.requestRender?.();
       }
       const reading = current.haze?.update(startMs + day * DAY_MS, compression);
+      current.extras?.update(seconds, startMs + day * DAY_MS);
       if (story.haze?.readout && Number.isFinite(reading))
         ticker.count.textContent = t('PM2.5 in {place}: {value} µg/m³ · CAMS model', {
           place: story.haze.readout.label,
@@ -675,10 +721,19 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
         const live = playing.includes(index);
         entry.marker.style.opacity = started.includes(index) ? (live ? '1' : '0.7') : '0';
         const anchor = place(entry.marker, entry.position, occluder);
-        if (live && entry.beat.clip && !entry.card)
-          entry.card = entry.beat.plunge
-            ? buildPlunge(current.root, entry.beat, anchor ?? { x: innerWidth / 2, y: innerHeight / 2 })
-            : buildCard(current.root, entry.beat);
+        if (live && (entry.beat.clip || entry.beat.card) && !entry.card)
+          entry.card = entry.beat.card
+            ? buildTextCard(current.root, entry.beat)
+            : entry.beat.plunge
+              ? buildPlunge(current.root, entry.beat, anchor ?? { x: innerWidth / 2, y: innerHeight / 2 })
+              : buildCard(current.root, entry.beat);
+        if (live && entry.card?.lines) {
+          const { start, end } = timeline.beats[index];
+          const each = (end - start) / entry.card.lines.length;
+          entry.card.lines.forEach((line, i) => {
+            line.style.opacity = seconds - start >= i * each ? '1' : '0';
+          });
+        }
         if (entry.card) {
           if (!live) {
             const card = entry.card;
