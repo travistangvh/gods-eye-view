@@ -619,14 +619,14 @@ const BHOTE_KOSHI_NEPAL_BOOTSTRAP_RECIPE = BHOTE_KOSHI_NEPAL_APPEND_RECIPE
 
 const SINGAPORE_HAZE_RECIPE = Object.freeze({
   id: 'singapore-haze-2026',
-  version: 3,
+  version: 5,
   // Browsers that installed an older version get this one on next load,
   // unless the operator has captured their own shots into the scene.
   upgradeInstalledScene: true,
   // Shows each shot's title over the map while it plays.
   captions: true,
   title: msg('Singapore Haze 2026'),
-  durationSec: 120.0,
+  durationSec: 375.0,
   style: 'normal',
   ui: { hidePanels: false, hudMode: 'full', safeFrame: '16:9' },
   // Only the four standard layers are declared here; each shot sets the
@@ -670,17 +670,18 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
     },
   ],
   cameraPath: [
+      // Act 1: the fires. One descent, then close to the ground.
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Aug 9: regional hotspots escalate',
-        lat: -3.0,
-        lon: 104.2,
-        alt: 3200000,
+        title: 'Act 1, The fires: Kalimantan, September 2026',
+        lat: -1.5,
+        lon: 110.0,
+        alt: 3000000,
         heading: 0,
-        pitch: -88,
+        pitch: -90,
         roll: 0,
-        duration: 6,
-        hold: 1.5,
+        duration: 5,
+        hold: 14,
         layers: {
           flights: false,
           satellites: false,
@@ -692,67 +693,29 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'ais-live-vessels': false,
           'air-quality': false,
         },
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Sep 5: smoke drifts toward Singapore on southeast winds',
-        lat: -1.0,
-        lon: 105.5,
-        alt: 2600000,
-        heading: 330,
-        pitch: -80,
-        roll: 0,
-        duration: 6,
-        hold: 1.5,
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': true,
-          wind: true,
-          'recent-imagery': false,
-          'ais-live-vessels': false,
-          'air-quality': false,
+        videoFeature: {
+          videoId: '-W8l4tLeLwY',
+          start: 18,
+          fullscreen: true,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Kalimantan, September 2026',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Fires have burned across Borneo and Sumatra since July. A strong El Niño and drained, dry peat made this the worst season in more than a decade (AP, Bloomberg).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'Ferry Irwandi · Sep 1 · watched 3.5 million times',
         },
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Sep 5: Singapore PSI 78-104, Moderate to Unhealthy',
-        lat: 1.35,
-        lon: 103.82,
-        alt: 70000,
+        title: 'Sep 17: Ogan Komering Ilir, South Sumatra, 3,028 hotspots in a day',
+        lat: -3.3642,
+        lon: 105.6116,
+        alt: 6000,
         heading: 0,
-        pitch: -85,
+        pitch: -40,
         roll: 0,
-        duration: 6,
-        hold: 1.5,
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': true,
-          wind: true,
-          'recent-imagery': false,
-          'ais-live-vessels': false,
-          'air-quality': {
-            enabled: true,
-            params: { at: '2026-09-05T18:00:00+08:00' },
-          },
-        },
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Sep 8: 5,910 hotspots, most in South Sumatra',
-        lat: -3.0,
-        lon: 104.2,
-        alt: 1500000,
-        heading: 0,
-        pitch: -88,
-        roll: 0,
-        duration: 6,
-        hold: 1.5,
+        duration: 8,
+        hold: 14,
         layers: {
           flights: false,
           satellites: false,
@@ -764,28 +727,17 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'ais-live-vessels': false,
           'air-quality': false,
         },
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Sep 17: 12,357 hotspots in 24 hours, 3,028 in South Sumatra',
-        lat: -3.0,
-        lon: 106.0,
-        alt: 2800000,
-        heading: 0,
-        pitch: -88,
-        roll: 0,
-        duration: 6,
-        hold: 1.5,
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': true,
-          wind: false,
-          'recent-imagery': true,
-          'ais-live-vessels': false,
-          'air-quality': false,
+        videoFeature: {
+          videoId: 'mCd4P89s9zo',
+          start: 62,
+          lat: -3.3,
+          lon: 105.6,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Ogan Komering Ilir: the peat is burning',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'On Sep 17 satellites counted 12,357 hotspots across Indonesia in 24 hours, 3,028 of them in South Sumatra. Peat fires smoulder underground for weeks.',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'tvOneNews aerial footage · Sep 5',
         },
       },
       {
@@ -818,7 +770,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
             lat: 0.4,
             lon: 101.9,
             start: 15,
-            // i18n-ignore: scene data label, shown verbatim like shot titles
+            // i18n-ignore: scene data text, shown verbatim like shot titles
             label: 'Riau · peat fire · Aug 25 · tvOneNews',
           },
           {
@@ -826,7 +778,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
             lat: -1.6,
             lon: 103.8,
             start: 45,
-            // i18n-ignore: scene data label, shown verbatim like shot titles
+            // i18n-ignore: scene data text, shown verbatim like shot titles
             label: 'Muaro Jambi · Oct 20 · Metro TV',
           },
           {
@@ -834,7 +786,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
             lat: -3.3,
             lon: 105.6,
             start: 62,
-            // i18n-ignore: scene data label, shown verbatim like shot titles
+            // i18n-ignore: scene data text, shown verbatim like shot titles
             label: 'Ogan Komering Ilir, South Sumatra · Sep 5 · tvOneNews',
           },
           {
@@ -842,7 +794,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
             lat: -2.9,
             lon: 111.9,
             start: 10,
-            // i18n-ignore: scene data label, shown verbatim like shot titles
+            // i18n-ignore: scene data text, shown verbatim like shot titles
             label: 'Tanjung Puting National Park · Oct 13 · Liputan6',
           },
           {
@@ -850,7 +802,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
             lat: -2.2,
             lon: 113.9,
             start: 40,
-            // i18n-ignore: scene data label, shown verbatim like shot titles
+            // i18n-ignore: scene data text, shown verbatim like shot titles
             label: 'Central Kalimantan from the air · Oct 17 · KompasTV',
           },
           {
@@ -858,22 +810,22 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
             lat: -0.97,
             lon: 116.7,
             start: 12,
-            // i18n-ignore: scene data label, shown verbatim like shot titles
+            // i18n-ignore: scene data text, shown verbatim like shot titles
             label: 'Near the new capital, East Kalimantan · Oct 18 · KompasTV',
           },
         ],
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Mid-Sep: dense smoke over Sumatra, reaching southern Vietnam',
-        lat: 4.0,
-        lon: 106.0,
-        alt: 4800000,
+        title: 'Oct: Palembang disappears into smoke',
+        lat: -3.0681,
+        lon: 104.7916,
+        alt: 8000,
         heading: 0,
-        pitch: -90,
+        pitch: -38,
         roll: 0,
-        duration: 6,
-        hold: 1.5,
+        duration: 5,
+        hold: 14,
         layers: {
           flights: false,
           satellites: false,
@@ -881,255 +833,109 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           traffic: false,
           'local-firms': true,
           wind: false,
-          'recent-imagery': true,
+          'recent-imagery': false,
           'ais-live-vessels': false,
           'air-quality': false,
         },
+        videoFeature: {
+          videoId: 'v5owKwId92Q',
+          start: 30,
+          lat: -2.9761,
+          lon: 104.7754,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Palembang disappears into smoke',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Smoke from the surrounding peat covered South Sumatra\'s capital. On Oct 18 it disrupted flights, and the disaster agency seeded clouds for rain (Metro TV).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'Trisno DriveOne drone footage · Oct 5',
+        },
       },
+      // Act 2: the crossing. One low flight north toward Singapore.
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Sep 29: firefighting focuses on South Sumatra and Central Kalimantan; Singapore PSI hit 167',
-        lat: -2.6,
-        lon: 108.5,
-        alt: 2400000,
-        heading: 0,
-        pitch: -88,
+        title: 'Act 2, The crossing: the smoke heads north to Singapore',
+        lat: 0.2,
+        lon: 104.0,
+        alt: 30000,
+        heading: 350,
+        pitch: -20,
         roll: 0,
-        duration: 6,
-        hold: 1.5,
+        duration: 10,
+        hold: 14,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': false,
+          wind: true,
+          'recent-imagery': false,
+          'ais-live-vessels': true,
+          'air-quality': false,
+        },
+        videoFeature: {
+          videoId: 'YI9P0Zmd7EE',
+          start: 34,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'The smoke crosses the strait',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Prevailing winds carry the smoke from Sumatra north across the Strait of Malacca to Singapore and Malaysia. The wind shown is today\'s.',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'CNA Explains · Sep 19',
+        },
+      },
+      // Act 3: the reach. One featured clip per place, with what happened there.
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Act 3, The reach: the smoke spreads across Southeast Asia',
+        lat: 4.0,
+        lon: 110.0,
+        alt: 5200000,
+        heading: 0,
+        pitch: -90,
+        roll: 0,
+        duration: 5,
+        hold: 14,
         layers: {
           flights: false,
           satellites: false,
           earthquakes: false,
           traffic: false,
           'local-firms': true,
-          wind: true,
+          wind: false,
           'recent-imagery': false,
           'ais-live-vessels': false,
           'air-quality': false,
         },
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 9: central Singapore PSI reaches 192',
-        lat: 1.35,
-        lon: 103.82,
-        alt: 60000,
-        heading: 0,
-        pitch: -85,
-        roll: 0,
-        duration: 6,
-        hold: 1.5,
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': true,
-          wind: true,
-          'recent-imagery': false,
-          'ais-live-vessels': false,
-          'air-quality': {
-            enabled: true,
-            params: { at: '2026-10-09T17:00:00+08:00' },
-          },
-        },
-        dataPackIds: ['videos'],
-        interactions: [
-          {
-            id: 'watch-cna-psi-192',
-            // i18n-ignore: card label stored in the scene
-            label: 'Play: CNA, 24-hour PSI hits high of 192 in central Singapore on Oct 9',
-            target: { packId: 'videos', featureId: 'cna-psi-192' },
-            action: {
-              type: 'card',
-              text: 'CNA on YouTube: "24-hour PSI hits high of 192 in central Singapore on Oct 9". The video plays in a YouTube player and is not copied into this app.',
-              url: 'https://youtu.be/3voBLOxD55Y',
-              video: { provider: 'youtube', id: '3voBLOxD55Y' },
-            },
-          },
-        ],
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 9: Malaysian schools close as the smoke spreads',
-        lat: 2.6,
-        lon: 103.2,
-        alt: 800000,
-        heading: 0,
-        pitch: -80,
-        roll: 0,
-        duration: 6,
-        hold: 1.5,
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': true,
-          wind: true,
-          'recent-imagery': false,
-          'ais-live-vessels': false,
-          'air-quality': false,
+        videoFeature: {
+          videoId: 'cw3UJ-h1oeY',
+          start: 10,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'The smoke spreads across Southeast Asia',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Smoke from fires in Sumatra and Kalimantan has drifted over Malaysia, Singapore, the Philippines and East Timor (Africanews, Oct 15).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'Al Jazeera English · Oct 13',
         },
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 9-11: Grand Prix goes ahead under haze',
-        lat: 1.255,
-        lon: 103.862,
-        alt: 5200,
+        title: 'Oct 16: Singapore\'s PSI peaks at 229',
+        lat: 1.2178,
+        lon: 103.8666,
+        alt: 6000,
         heading: 0,
         pitch: -38,
         roll: 0,
-        duration: 6,
-        hold: 1.5,
+        duration: 5,
+        hold: 14,
         layers: {
-          flights: true,
+          flights: false,
           satellites: false,
           earthquakes: false,
           traffic: false,
           'local-firms': false,
           wind: false,
-          'recent-imagery': false,
-          'ais-live-vessels': true,
-          'air-quality': false,
-        },
-        dataPackIds: ['videos'],
-        interactions: [
-          {
-            id: 'watch-cna-f1',
-            // i18n-ignore: card label stored in the scene
-            label: 'Play: CNA, Singapore haze persists, air quality remains \'unhealthy\' as F1 weekend looms',
-            target: { packId: 'videos', featureId: 'cna-f1' },
-            action: {
-              type: 'card',
-              text: 'CNA on YouTube: "Singapore haze persists, air quality remains \'unhealthy\' as F1 weekend looms". The video plays in a YouTube player and is not copied into this app.',
-              url: 'https://youtu.be/ktJuo1nj7sI',
-              video: { provider: 'youtube', id: 'ktJuo1nj7sI' },
-            },
-          },
-          {
-            id: 'watch-euronews-marina-bay',
-            // i18n-ignore: card label stored in the scene
-            label: 'Watch: Euronews, Marina Bay Sands nearly hidden',
-            target: { packId: 'videos', featureId: 'euronews-marina-bay' },
-            action: {
-              type: 'card',
-              text: 'Euronews, 15 Oct 2026: footage of Marina Bay Sands almost hidden by smoke. Opens the original report in a new tab; the video is not copied into this app.',
-              url: 'https://www.euronews.com/2026/10/15/indonesias-skies-turn-apocalyptic-orange-as-smoke-blankets-singapore',
-            },
-          },
-        ],
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 15: Palangkaraya, Central Kalimantan, vanishes in smoke',
-        lat: -2.21,
-        lon: 113.92,
-        alt: 180000,
-        heading: 0,
-        pitch: -82,
-        roll: 0,
-        duration: 6,
-        hold: 1.5,
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': true,
-          wind: false,
-          'recent-imagery': false,
-          'ais-live-vessels': false,
-          'air-quality': false,
-        },
-        dataPackIds: ['videos'],
-        interactions: [
-          {
-            id: 'watch-mirror-kalimantan',
-            // i18n-ignore: card label stored in the scene
-            label: 'Play: Mirror Now, INDONESIA CHOKES! Forest Fires Shroud Kalimantan In Thick Haze, Air Quality At \'Hazardous\' Level',
-            target: { packId: 'videos', featureId: 'mirror-kalimantan' },
-            action: {
-              type: 'card',
-              text: 'Mirror Now on YouTube: "INDONESIA CHOKES! Forest Fires Shroud Kalimantan In Thick Haze, Air Quality At \'Hazardous\' Level". The video plays in a YouTube player and is not copied into this app.',
-              url: 'https://youtu.be/B0FDbgUhSU8',
-              video: { provider: 'youtube', id: 'B0FDbgUhSU8' },
-            },
-          },
-          {
-            id: 'watch-euronews-palangkaraya',
-            // i18n-ignore: card label stored in the scene
-            label: 'Watch: Euronews, aerial view of Palangkaraya',
-            target: { packId: 'videos', featureId: 'euronews-palangkaraya' },
-            action: {
-              type: 'card',
-              text: 'Euronews, 15 Oct 2026: aerial footage of Palangkaraya, Central Kalimantan, nearly hidden by smoke with visibility down to a few dozen metres. Opens the original report in a new tab; the video is not copied into this app.',
-              url: 'https://www.euronews.com/2026/10/15/indonesias-skies-turn-apocalyptic-orange-as-smoke-blankets-singapore',
-            },
-          },
-        ],
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 15: Singapore\'s 24-hour PSI hits a new high of 212',
-        lat: 1.35,
-        lon: 103.82,
-        alt: 55000,
-        heading: 0,
-        pitch: -85,
-        roll: 0,
-        duration: 6,
-        hold: 1.5,
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': true,
-          wind: true,
-          'recent-imagery': false,
-          'ais-live-vessels': false,
-          'air-quality': {
-            enabled: true,
-            params: { at: '2026-10-15T12:00:00+08:00' },
-          },
-        },
-        dataPackIds: ['videos'],
-        interactions: [
-          {
-            id: 'watch-st-psi-212',
-            // i18n-ignore: card label stored in the scene
-            label: 'Play: The Straits Times, Singapore haze: 24-hour PSI hits new high of 212',
-            target: { packId: 'videos', featureId: 'st-psi-212' },
-            action: {
-              type: 'card',
-              text: 'The Straits Times on YouTube: "Singapore haze: 24-hour PSI hits new high of 212". The video plays in a YouTube player and is not copied into this app.',
-              url: 'https://youtu.be/9Sc50HlT6QI',
-              video: { provider: 'youtube', id: '9Sc50HlT6QI' },
-            },
-          },
-        ],
-      },
-      {
-        // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 16: PSI reaches 229; minister warns it could pass 300',
-        lat: 1.35,
-        lon: 103.82,
-        alt: 45000,
-        heading: 0,
-        pitch: -85,
-        roll: 0,
-        duration: 6,
-        hold: 1.5,
-        layers: {
-          flights: false,
-          satellites: false,
-          earthquakes: false,
-          traffic: false,
-          'local-firms': true,
-          wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
           'air-quality': {
@@ -1137,33 +943,68 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
             params: { at: '2026-10-16T15:00:00+08:00' },
           },
         },
-        dataPackIds: ['videos'],
-        interactions: [
-          {
-            id: 'watch-newsx-psi-229',
-            // i18n-ignore: card label stored in the scene
-            label: 'Play: NewsX World, Singapore Haze Crisis LIVE: PSI Hits 229 as Tourists Face Unhealthy Air',
-            target: { packId: 'videos', featureId: 'newsx-psi-229' },
-            action: {
-              type: 'card',
-              text: 'NewsX World on YouTube: "Singapore Haze Crisis LIVE: PSI Hits 229 as Tourists Face Unhealthy Air". The video plays in a YouTube player and is not copied into this app.',
-              url: 'https://youtu.be/xfWaoUsbYTM',
-              video: { provider: 'youtube', id: 'xfWaoUsbYTM' },
-            },
-          },
-        ],
+        videoFeature: {
+          videoId: '2l7irQkN2b0',
+          start: 3,
+          lat: 1.2868,
+          lon: 103.8545,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Singapore: the worst haze in more than a decade',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'The 24-hour PSI reached 212 on Oct 15 and 229 on Oct 16, and the minister warned it could pass 300 (NEA, CNA).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'The Star · Sep 14',
+        },
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 18: milky haze over the skyline, 12 days above 101 PSI',
-        lat: 1.255,
-        lon: 103.86,
-        alt: 6500,
+        title: 'Oct 9-11: the Grand Prix runs under haze',
+        lat: 1.2569,
+        lon: 103.8701,
+        alt: 3000,
         heading: 0,
-        pitch: -35,
+        pitch: -38,
         roll: 0,
-        duration: 6,
-        hold: 1.5,
+        duration: 5,
+        hold: 14,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': false,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': {
+            enabled: true,
+            params: { at: '2026-10-09T17:00:00+08:00' },
+          },
+        },
+        videoFeature: {
+          videoId: 'yALg1in78o0',
+          start: 9,
+          lat: 1.2914,
+          lon: 103.864,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'The Grand Prix runs under haze',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Singapore\'s Formula 1 weekend went ahead on Oct 9-11 under a haze cloud; organisers had prepared contingency plans (Reuters, Al Jazeera).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'Reuters · Oct 9',
+        },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Oct 6: Batu Pahat, Johor, closes about 200 schools',
+        lat: 1.7628,
+        lon: 102.9487,
+        alt: 8000,
+        heading: 0,
+        pitch: -38,
+        roll: 0,
+        duration: 5,
+        hold: 14,
         layers: {
           flights: false,
           satellites: false,
@@ -1175,94 +1016,101 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'ais-live-vessels': false,
           'air-quality': false,
         },
-        dataPackIds: ['videos'],
-        interactions: [
-          {
-            id: 'watch-st-12-days',
-            // i18n-ignore: card label stored in the scene
-            label: 'Play: The Straits Times, 12 days over 101 PSI: Singapore\'s longest stretch of unhealthy air quality since 2015 haze',
-            target: { packId: 'videos', featureId: 'st-12-days' },
-            action: {
-              type: 'card',
-              text: 'The Straits Times on YouTube: "12 days over 101 PSI: Singapore\'s longest stretch of unhealthy air quality since 2015 haze". The video plays in a YouTube player and is not copied into this app.',
-              url: 'https://youtu.be/SIp192Rgt88',
-              video: { provider: 'youtube', id: 'SIp192Rgt88' },
-            },
-          },
-          {
-            id: 'watch-cgtn-skyline',
-            // i18n-ignore: card label stored in the scene
-            label: 'Watch: CGTN live views of the smog-shrouded skyline',
-            target: { packId: 'videos', featureId: 'cgtn-skyline' },
-            action: {
-              type: 'card',
-              text: 'CGTN, 18 Oct 2026: live views of the city skyline under milky haze. Opens the original page in a new tab; the video is not copied into this app.',
-              url: 'https://news.cgtn.com/news/2026-10-18/Live-Views-of-Singapore-s-smog-shrouded-skyline-1RkRm0xxao0/share_amp.html',
-            },
-          },
-        ],
+        videoFeature: {
+          videoId: 'ZSCHjeYQwzk',
+          start: 5,
+          lat: 1.8548,
+          lon: 102.9325,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Batu Pahat: about 200 schools close',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Schools in Batu Pahat closed as the haze thickened. Malaysian schools close wherever the Air Pollutant Index passes 180 (CNA, Malay Mail).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'CNA · Oct 6',
+        },
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 20: worst transboundary haze in more than a decade',
-        lat: 0.5,
-        lon: 106.5,
-        alt: 5600000,
+        title: 'Oct 9: Malaysia shuts schools in Kuala Lumpur and six states',
+        lat: 3.0889,
+        lon: 101.7244,
+        alt: 6000,
         heading: 0,
-        pitch: -90,
+        pitch: -38,
         roll: 0,
-        duration: 6,
-        hold: 1.5,
+        duration: 5,
+        hold: 14,
         layers: {
           flights: false,
           satellites: false,
           earthquakes: false,
           traffic: false,
-          'local-firms': true,
-          wind: true,
-          'recent-imagery': true,
+          'local-firms': false,
+          wind: false,
+          'recent-imagery': false,
           'ais-live-vessels': false,
           'air-quality': false,
         },
-        dataPackIds: ['videos'],
-        interactions: [
-          {
-            id: 'watch-cna-explains',
-            // i18n-ignore: card label stored in the scene
-            label: 'Play: CNA, CNA Explains: Why Indonesia forest fires could get worse',
-            target: { packId: 'videos', featureId: 'cna-explains' },
-            action: {
-              type: 'card',
-              text: 'CNA on YouTube: "CNA Explains: Why Indonesia forest fires could get worse". The video plays in a YouTube player and is not copied into this app.',
-              url: 'https://youtu.be/kMgUBlZXH2o',
-              video: { provider: 'youtube', id: 'kMgUBlZXH2o' },
-            },
-          },
-          {
-            id: 'watch-nypost-sumatra',
-            // i18n-ignore: card label stored in the scene
-            label: 'Play: New York Post, Wildfires Turn Skies Orange Across Indonesia as Toxic Haze Blankets Sumatra',
-            target: { packId: 'videos', featureId: 'nypost-sumatra' },
-            action: {
-              type: 'card',
-              text: 'New York Post on YouTube: "Wildfires Turn Skies Orange Across Indonesia as Toxic Haze Blankets Sumatra". The video plays in a YouTube player and is not copied into this app.',
-              url: 'https://youtu.be/ALLHUdVFKAo',
-              video: { provider: 'youtube', id: 'ALLHUdVFKAo' },
-            },
-          },
-        ],
+        videoFeature: {
+          videoId: 'c_OA2lTt2cE',
+          start: 5,
+          lat: 3.1579,
+          lon: 101.7123,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Kuala Lumpur: classes move home',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'On Oct 9 Malaysia closed schools in Kuala Lumpur, Putrajaya, Selangor, Johor, Melaka, Negeri Sembilan and part of Pahang (Reuters via Al Jazeera).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'AP Archive · Oct 13',
+        },
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct: Singapore serves notices on seven Indonesian firms',
-        lat: -1.0,
-        lon: 106.0,
-        alt: 3000000,
+        title: 'Sep 2: the haze reaches the Philippines',
+        lat: 9.6242,
+        lon: 118.7558,
+        alt: 10000,
         heading: 0,
-        pitch: -88,
+        pitch: -38,
         roll: 0,
-        duration: 6,
-        hold: 1.5,
+        duration: 8,
+        hold: 14,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': false,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        videoFeature: {
+          videoId: '-KeYnUlS5cU',
+          start: 2,
+          lat: 9.7392,
+          lon: 118.7353,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'The Philippines: the farthest reach',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'By Sep 2 haze from Indonesia had reached Palawan, the Visayas and Mindanao (ABS-CBN TV Patrol).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'ABS-CBN News · Sep 2',
+        },
+      },
+      // Act 4: back to the source. Who suffers, who is named, who protests.
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Act 4, Back to the source: Pontianak closes schools in thick smoke',
+        lat: -0.1183,
+        lon: 109.3587,
+        alt: 8000,
+        heading: 0,
+        pitch: -38,
+        roll: 0,
+        duration: 8,
+        hold: 14,
         layers: {
           flights: false,
           satellites: false,
@@ -1273,6 +1121,238 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'recent-imagery': false,
           'ais-live-vessels': false,
           'air-quality': false,
+        },
+        videoFeature: {
+          videoId: 'gJOM0L3PsZA',
+          start: 60,
+          lat: -0.0263,
+          lon: 109.3425,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Pontianak: schools close as the smoke thickens',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Thick smoke cut visibility across the West Kalimantan capital and schools were closed (Metro TV, Sep 1).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'Metro TV · Sep 1',
+        },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Oct 12-15: Palangkaraya, Central Kalimantan, turns yellow',
+        lat: -2.3016,
+        lon: 113.9375,
+        alt: 8000,
+        heading: 0,
+        pitch: -38,
+        roll: 0,
+        duration: 5,
+        hold: 14,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': true,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        videoFeature: {
+          videoId: 'ZbaFgyvEP4w',
+          start: 20,
+          lat: -2.2096,
+          lon: 113.9213,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Palangkaraya: a city swallowed by smoke',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Thick yellow smoke cut visibility to a few dozen metres on Oct 15, and the air pollution index passed 1,200, four times the hazardous level (Euronews, EnviroLink).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'tvOneNews · Oct 12',
+        },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Oct 16-23: Singapore names companies',
+        lat: 1.2782,
+        lon: 103.8397,
+        alt: 2500,
+        heading: 0,
+        pitch: -38,
+        roll: 0,
+        duration: 5,
+        hold: 18,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': false,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        videoFeature: {
+          videoId: 'CxyAEx__Edg',
+          start: 5,
+          lat: 1.3069,
+          lon: 103.8346,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Singapore names companies',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Notices under the Transboundary Haze Pollution Act to companies Singapore suspects are linked to the fires. Notices are not findings of liability; TSH and First Resources deny causing the haze.',
+          points: [
+            // i18n-ignore: scene data text, shown verbatim like shot titles
+            'Oct 16, Sumatra: PT Bumi Andalas Permai, PT Bumi Mekar Hijau, PT Paramitra Mulia Langgeng, PT Sumatera Alam Anugerah, PT SBA Wood Industries, PT Hutan Lestari Raya, PT Bangkanesia',
+            // i18n-ignore: scene data text, shown verbatim like shot titles
+            'Oct 19, Kalimantan: PT Buana Megatama Jaya, PT Mananjung Hayak, PT Baratama Putra Perkasa',
+            // i18n-ignore: scene data text, shown verbatim like shot titles
+            'Oct 19, SGX queries: Golden Agri-Resources, Bumitama Agri, First Resources, Wilmar, Kencana Agri, Indofood Agri, TSH Resources',
+            // i18n-ignore: scene data text, shown verbatim like shot titles
+            'Oct 23: information notices to 10 Singapore-registered firms, including Wilmar and Asia Pulp & Paper',
+          ],
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'CNA · Oct 19 · sources: NEA, SGX RegCo, Business Today, The Edge',
+        },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Sep-Oct: Indonesia suspends company licences',
+        lat: -6.2585,
+        lon: 106.8088,
+        alt: 4000,
+        heading: 0,
+        pitch: -38,
+        roll: 0,
+        duration: 8,
+        hold: 14,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': false,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        videoFeature: {
+          videoId: 'psaPauHrnIc',
+          start: 40,
+          lat: -6.2125,
+          lon: 106.8007,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Jakarta: licences suspended',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Indonesia suspended 26 companies\' licences on Sep 16; by Oct 19 it had sanctioned 32 and revoked 5 permits. On Oct 23 police named 11 corporate suspects without releasing their names.',
+          points: [
+            // i18n-ignore: scene data text, shown verbatim like shot titles
+            'Prabowo, Sep 7: \'I want the names of those corporations to be quickly handed to me.\'',
+          ],
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'Kompas.com · Oct 22 · sources: Antara, Tempo, NST',
+        },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Oct 13: students protest in Pekanbaru, Riau',
+        lat: 0.4723,
+        lon: 101.4538,
+        alt: 3000,
+        heading: 0,
+        pitch: -38,
+        roll: 0,
+        duration: 5,
+        hold: 14,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': true,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        videoFeature: {
+          videoId: 'oFu_fG69Ek8',
+          start: 20,
+          lat: 0.5068,
+          lon: 101.4477,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Pekanbaru: students march on the governor',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'Hundreds of students rallied at the Riau Governor\'s Office, demanding action on the fires and the smoke. Their banner: \'Forests burn, the people suffer, the state must act.\'',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'PekanbaruTV · Oct 13',
+        },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Oct 19: hundreds protest at the Central Kalimantan Governor\'s Office',
+        lat: -2.2334,
+        lon: 113.9175,
+        alt: 2000,
+        heading: 0,
+        pitch: -38,
+        roll: 0,
+        duration: 8,
+        hold: 16,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': true,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        videoFeature: {
+          videoId: '13mtRrVlslI',
+          start: 30,
+          lat: -2.2104,
+          lon: 113.9135,
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'Palangkaraya: \'the people are on the brink of death\'',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'More than 500 protesters gathered at the Central Kalimantan Governor\'s Office, demanding the fires be declared a national disaster (AP, Liputan6). The banner\'s words are the title.',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'Roya News · Oct 19',
+        },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Oct 24: the fires still burn',
+        lat: 3.0,
+        lon: 108.0,
+        alt: 4800000,
+        heading: 0,
+        pitch: -90,
+        roll: 0,
+        duration: 8,
+        hold: 14,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': true,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': true,
+        },
+        videoFeature: {
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          title: 'The fires still burn',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          summary: 'On Oct 24 Singapore\'s PSI was still unhealthy, between 117 and 150. Indonesia\'s forestry ministry has warned the crisis could last until November (Reuters).',
+          // i18n-ignore: scene data text, shown verbatim like shot titles
+          label: 'NEA live readings · Reuters',
         },
       },
   ],

@@ -413,7 +413,8 @@ export class SceneDirector {
 
   /**
    * Show what a built-in scene's recipe puts over the map for this shot: the
-   * title caption (scenes that ask for captions) and any video wall.
+   * title caption (scenes that ask for captions) and any video wall or
+   * featured clip.
    */
   _showShotOverlays(scene, shot) {
     const recipe = SCENE_RECIPES.find((entry) => entry.id === scene?.id);
@@ -422,7 +423,10 @@ export class SceneDirector {
     const keyframe = recipe?.cameraPath?.find(
       (entry) => entry.title === shot.title,
     );
-    this._videoWall?.show(keyframe?.videoWall ?? []);
+    this._videoWall?.show({
+      wall: keyframe?.videoWall ?? [],
+      feature: keyframe?.videoFeature ?? null,
+    });
   }
 
   _hideShotOverlays() {

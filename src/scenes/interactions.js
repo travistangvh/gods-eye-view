@@ -2,6 +2,7 @@ import * as Cesium from 'cesium';
 import { isPointerFree } from '../data/inputOwnership.js';
 import { createInteractionSession } from '../director/interactions/session.js';
 import { t } from '../i18n/index.js';
+import { createSceneClipPlayer } from '../ui/sceneClips.js';
 
 /** Own the active shot's pick handler, accessible actions and plain-text feedback. */
 export function createSceneInteractions(
@@ -25,21 +26,14 @@ export function createSceneInteractions(
         card.append(text);
         const video = item.action.video;
         if (video?.provider === 'youtube') {
-          // Privacy-enhanced player; the page's CSP already allows this host.
-          // Nothing autoplays, and clearing the card removes the frame.
-          const frame = document.createElement('iframe');
-          frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(video.id)}?rel=0`;
-          frame.title = item.label;
-          frame.width = '320';
-          frame.height = '180';
-          frame.loading = 'lazy';
-          frame.allow = 'encrypted-media; picture-in-picture; fullscreen';
-          frame.allowFullscreen = true;
-          frame.referrerPolicy = 'strict-origin-when-cross-origin';
-          frame.setAttribute(
-            'sandbox',
-            'allow-scripts allow-same-origin allow-presentation',
-          );
+          // The clip's local copy, or the YouTube player without one.
+          // Nothing autoplays, and clearing the card removes the player.
+          const frame = createSceneClipPlayer(document, {
+            videoId: video.id,
+            title: item.label,
+          });
+          frame.width = 320;
+          frame.height = 180;
           frame.style.border = '0';
           frame.style.maxWidth = '100%';
           card.append(frame);
