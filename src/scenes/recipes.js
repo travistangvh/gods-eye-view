@@ -637,6 +637,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
     'wind',
     'recent-imagery',
     'ais-live-vessels',
+    'air-quality',
     'flights',
   ],
   installAlongsideSceneId: 'bhote-koshi-nepal-scene',
@@ -684,6 +685,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: false,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
       },
       {
@@ -706,6 +708,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
       },
       {
@@ -728,6 +731,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': true,
         },
       },
       {
@@ -750,6 +754,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: false,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
       },
       {
@@ -772,6 +777,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: false,
           'recent-imagery': true,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
       },
       {
@@ -794,6 +800,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: false,
           'recent-imagery': true,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
       },
       {
@@ -816,6 +823,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
       },
       {
@@ -838,6 +846,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': true,
         },
         dataPackIds: ['videos'],
         interactions: [
@@ -875,6 +884,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
       },
       {
@@ -897,6 +907,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: false,
           'recent-imagery': false,
           'ais-live-vessels': true,
+          'air-quality': false,
         },
         dataPackIds: ['videos'],
         interactions: [
@@ -945,6 +956,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: false,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
         dataPackIds: ['videos'],
         interactions: [
@@ -993,6 +1005,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': true,
         },
         dataPackIds: ['videos'],
         interactions: [
@@ -1030,6 +1043,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': true,
         },
         dataPackIds: ['videos'],
         interactions: [
@@ -1067,6 +1081,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: false,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
         dataPackIds: ['videos'],
         interactions: [
@@ -1115,6 +1130,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: true,
           'recent-imagery': true,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
         dataPackIds: ['videos'],
         interactions: [
@@ -1164,6 +1180,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: false,
           'recent-imagery': false,
           'ais-live-vessels': false,
+          'air-quality': false,
         },
       },
   ],
