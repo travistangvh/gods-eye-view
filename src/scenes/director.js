@@ -33,6 +33,7 @@ import { createSceneDataPacks } from './dataPacks/controller.js';
 import { createSceneInteractions } from './interactions.js';
 import { createSceneCaption } from '../ui/sceneCaption.js';
 import { createSceneVideoWall } from '../ui/sceneVideoWall.js';
+import { createSceneFireStory } from '../ui/sceneFireStory.js';
 import { createSceneSharing } from './sharing.js';
 import {
   createBundleAssets,
@@ -104,6 +105,7 @@ export class SceneDirector {
     this._bundleAssets = createBundleAssets();
     this._caption = createSceneCaption();
     this._videoWall = createSceneVideoWall(viewer);
+    this._fireStory = createSceneFireStory(viewer);
     this._dataPacks = createSceneDataPacks(viewer, {
       ...dataPacks,
       sources: {
@@ -248,6 +250,7 @@ export class SceneDirector {
     this._interactions?.destroy();
     this._caption?.destroy();
     this._videoWall?.destroy();
+    this._fireStory?.destroy();
     this._dataPacks?.destroy();
     this._controls?.destroy();
     this._state.destroy();
@@ -413,8 +416,8 @@ export class SceneDirector {
 
   /**
    * Show what a built-in scene's recipe puts over the map for this shot: the
-   * title caption (scenes that ask for captions) and any video wall or
-   * featured clip.
+   * title caption (scenes that ask for captions), any video wall or
+   * featured clip, and any fire story.
    */
   _showShotOverlays(scene, shot) {
     const recipe = SCENE_RECIPES.find((entry) => entry.id === scene?.id);
@@ -427,11 +430,13 @@ export class SceneDirector {
       wall: keyframe?.videoWall ?? [],
       feature: keyframe?.videoFeature ?? null,
     });
+    this._fireStory?.show(keyframe?.fireStory ?? null);
   }
 
   _hideShotOverlays() {
     this._caption?.hide();
     this._videoWall?.hide();
+    this._fireStory?.hide();
   }
 
   _shotOutcome(type, scene, shot, index = scene.shots.indexOf(shot)) {
@@ -1969,6 +1974,7 @@ export class SceneDirector {
     this._interactions?.clear();
     this._caption?.hide();
     this._videoWall?.hide();
+    this._fireStory?.hide();
     this._dataPacks?.clear();
     this._sceneSeekGeneration++;
     this._loadAbort?.abort();

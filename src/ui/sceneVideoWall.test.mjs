@@ -30,18 +30,6 @@ test('without a document or scene the wall is a no-op', () => {
   wall.destroy();
 });
 
-test('the haze scene has one fire wall with valid clips', () => {
-  const recipe = SCENE_RECIPES.find((r) => r.id === 'singapore-haze-2026');
-  const walls = recipe.cameraPath.filter((shot) => shot.videoWall);
-  assert.equal(walls.length, 1);
-  assert.equal(walls[0].videoWall.length, 6);
-  for (const clip of walls[0].videoWall) {
-    assert.match(clip.videoId, /^[A-Za-z0-9_-]{11}$/);
-    assert.ok(Number.isFinite(clip.lat) && Number.isFinite(clip.lon));
-    assert.ok(clip.label.length > 0);
-  }
-});
-
 test('the haze scene features one clip per place with a title and summary', () => {
   const recipe = SCENE_RECIPES.find((r) => r.id === 'singapore-haze-2026');
   const features = recipe.cameraPath

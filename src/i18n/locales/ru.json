@@ -3029,5 +3029,6 @@
   "Search": "Поиск",
   "More": "Ещё",
   "Panels": "Панели",
-  "Fire footage by location": "Видео пожаров по местам"
+  "Fire footage by location": "Видео пожаров по местам",
+  "{count} fire detections that day · NASA VIIRS": "Очагов пожаров за день: {count} · NASA VIIRS"
 }

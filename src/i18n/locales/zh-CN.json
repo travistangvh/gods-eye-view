@@ -2828,5 +2828,6 @@
   "Search": "搜索",
   "More": "更多",
   "Panels": "面板",
-  "Fire footage by location": "按地点显示的火灾画面"
+  "Fire footage by location": "按地点显示的火灾画面",
+  "{count} fire detections that day · NASA VIIRS": "当天火点 {count} 个 · NASA VIIRS"
 }

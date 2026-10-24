@@ -2962,5 +2962,6 @@
   "Search": "Buscar",
   "More": "Más",
   "Panels": "Paneles",
-  "Fire footage by location": "Imágenes del fuego por ubicación"
+  "Fire footage by location": "Imágenes del fuego por ubicación",
+  "{count} fire detections that day · NASA VIIRS": "{count} detecciones de incendios ese día · NASA VIIRS"
 }

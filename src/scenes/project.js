@@ -136,7 +136,25 @@ export function recipeToScene(recipe) {
         heading: keyframe.heading || 0,
         pitch: keyframe.pitch || -40,
         roll: keyframe.roll || 0,
+        // An explicit move needs both endpoints in ellipsoid heights.
+        ...(keyframe.move ? { altitudeReference: 'ellipsoid' } : {}),
       },
+      ...(keyframe.move
+        ? {
+            move: {
+              from: {
+                lat: keyframe.move.from.lat,
+                lon: keyframe.move.from.lon,
+                alt: keyframe.move.from.alt,
+                heading: keyframe.move.from.heading || 0,
+                pitch: keyframe.move.from.pitch ?? -40,
+                roll: keyframe.move.from.roll || 0,
+                altitudeReference: 'ellipsoid',
+              },
+              easing: keyframe.move.easing || 'cubic-in-out',
+            },
+          }
+        : {}),
       visual: {
         style: recipe.style || 'normal',
         bloom: {

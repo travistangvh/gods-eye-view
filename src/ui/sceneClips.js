@@ -16,23 +16,27 @@ export const CARD_CLIP_SECONDS = 90;
 /**
  * @param {string} videoId
  * @param {number} [start]
+ * @param {number} [seconds] - an exact length; omitted for the default cut
  * @returns {string}
  */
-export function sceneClipFileName(videoId, start = 0) {
-  return `${videoId}-${Math.max(0, Math.floor(Number(start) || 0))}s.mp4`;
+export function sceneClipFileName(videoId, start = 0, seconds = null) {
+  const whole = (value) => Math.max(0, Math.floor(Number(value) || 0));
+  return seconds
+    ? `${videoId}-${whole(start)}s-${whole(seconds)}s.mp4`
+    : `${videoId}-${whole(start)}s.mp4`;
 }
 
 /**
- * Every clip a recipe plays, once each: video walls, featured clips and
- * card videos.
+ * Every clip a recipe plays, once each: video walls, featured clips, fire
+ * story beats (cut to their exact length) and card videos.
  *
  * @param {object} recipe
  * @returns {Array<{videoId: string, start: number, seconds: number, file: string}>}
  */
 export function collectSceneClips(recipe) {
   const clips = new Map();
-  const add = (videoId, start, seconds) => {
-    const file = sceneClipFileName(videoId, start);
+  const add = (videoId, start, seconds, exact = false) => {
+    const file = sceneClipFileName(videoId, start, exact ? seconds : null);
     if (!clips.has(file))
       clips.set(file, { videoId, start: Number(start) || 0, seconds, file });
   };
@@ -45,6 +49,9 @@ export function collectSceneClips(recipe) {
         shot.videoFeature.start,
         OVERLAY_CLIP_SECONDS,
       );
+    for (const beat of shot.fireStory?.beats || [])
+      if (beat.clip)
+        add(beat.clip.videoId, beat.clip.start, beat.clip.seconds, true);
     for (const item of shot.interactions || []) {
       const video = item.action?.video;
       if (video?.provider === 'youtube') add(video.id, 0, CARD_CLIP_SECONDS);
@@ -64,10 +71,10 @@ export function collectSceneClips(recipe) {
  */
 export function createSceneClipPlayer(
   doc,
-  { videoId, start = 0, title, autoplay = false },
+  { videoId, start = 0, seconds = null, title, autoplay = false },
 ) {
   const video = doc.createElement('video');
-  video.src = `/${SCENE_CLIP_DIRECTORY}/${sceneClipFileName(videoId, start)}`;
+  video.src = `/${SCENE_CLIP_DIRECTORY}/${sceneClipFileName(videoId, start, seconds)}`;
   video.title = title;
   video.playsInline = true;
   video.preload = autoplay ? 'auto' : 'metadata';
