@@ -24,6 +24,7 @@ export function createScenePlaybackAdapter(director, defaultShotDurationSec) {
           shot: displayShotTitle(shot.title, shot, scene),
         }),
       );
+      director._showCaption(scene, shot);
       director._logEvent('shot_start', {
         sceneId: scene.id,
         shotId: shot.id,
@@ -80,6 +81,7 @@ export function createScenePlaybackAdapter(director, defaultShotDurationSec) {
     complete() {
       director._setProgress(1);
       director._updateStatus(t('Scene run complete'));
+      director._caption?.hide();
       director._logEvent('scene_run_complete', {});
     },
   };

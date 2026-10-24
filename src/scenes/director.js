@@ -31,6 +31,7 @@ import { sceneLayerPlan, sceneRequiresContextModeExit } from './scenePolicy.js';
 import { t, tn, msg } from '../i18n/index.js';
 import { createSceneDataPacks } from './dataPacks/controller.js';
 import { createSceneInteractions } from './interactions.js';
+import { createSceneCaption } from '../ui/sceneCaption.js';
 import { createSceneSharing } from './sharing.js';
 import {
   createBundleAssets,
@@ -100,6 +101,7 @@ export class SceneDirector {
     this._isMapStackAvailable = isMapStackAvailable;
     this._scenePacks = scenePacks;
     this._bundleAssets = createBundleAssets();
+    this._caption = createSceneCaption();
     this._dataPacks = createSceneDataPacks(viewer, {
       ...dataPacks,
       sources: {
@@ -242,6 +244,7 @@ export class SceneDirector {
     this._sharing?.destroy();
     this._bundleAssets?.clear();
     this._interactions?.destroy();
+    this._caption?.destroy();
     this._dataPacks?.destroy();
     this._controls?.destroy();
     this._state.destroy();
@@ -387,12 +390,21 @@ export class SceneDirector {
     this._state?.publish(change);
   }
 
+  /** Show a scene's shot title over the map, for scenes that ask for captions. */
+  _showCaption(scene, shot) {
+    if (!SCENE_RECIPES.find((recipe) => recipe.id === scene?.id)?.captions)
+      return;
+    this._caption?.show(displayShotTitle(shot.title, shot, scene));
+  }
+
   _shotOutcome(type, scene, shot, index = scene.shots.indexOf(shot)) {
-    if (type === 'shot-loaded')
+    if (type === 'shot-loaded') {
       this._presentation.status = t('Loaded: {scene} / {shot}', {
         scene: displaySceneTitle(scene),
         shot: displayShotTitle(shot.title, shot, scene),
       });
+      this._showCaption(scene, shot);
+    }
     this._publish({
       type,
       sceneId: scene.id,
@@ -1918,6 +1930,7 @@ export class SceneDirector {
   stopScene(reason = msg('Stopped')) {
     this._setSceneMediaPlayback();
     this._interactions?.clear();
+    this._caption?.hide();
     this._dataPacks?.clear();
     this._sceneSeekGeneration++;
     this._loadAbort?.abort();

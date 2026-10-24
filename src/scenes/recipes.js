@@ -620,6 +620,8 @@ const BHOTE_KOSHI_NEPAL_BOOTSTRAP_RECIPE = BHOTE_KOSHI_NEPAL_APPEND_RECIPE
 const SINGAPORE_HAZE_RECIPE = Object.freeze({
   id: 'singapore-haze-2026',
   version: 1,
+  // Shows each shot's title over the map while it plays.
+  captions: true,
   title: msg('Singapore Haze 2026'),
   durationSec: 120.0,
   style: 'normal',
