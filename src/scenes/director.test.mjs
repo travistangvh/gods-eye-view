@@ -17,6 +17,7 @@ import test from 'node:test';
 import { SceneDirector } from './director.js';
 import { SCENE_TRACKING_PARAM_KEYS } from './scenePolicy.js';
 import { SCENE_RECIPES, getSceneAppendRecipeById } from './recipes.js';
+import { createDefaultProject } from './project.js';
 
 const NEPAL_ORIGINAL_SHOT_TITLES = [
   'Global Incident Context',
@@ -484,6 +485,42 @@ test('a previously installed Nepal scene stays deleted when its marker remains',
       director._project.scenes.some(({ title }) => title === 'Nepal Flood Incident'),
       false,
     );
+  } finally {
+    restore();
+  }
+});
+
+function olderHazeProjectFixture() {
+  const project = createDefaultProject();
+  const haze = project.scenes.find(({ id }) => id === 'singapore-haze-2026');
+  haze.shots = haze.shots
+    .filter((shot) => !shot.title.startsWith('Aug-Oct'))
+    .map((shot) => ({ ...shot, sourcePackVersion: 1 }));
+  return project;
+}
+
+test('an installed haze scene from an older recipe is replaced with the current one', () => {
+  const { director, restore } = makeDirector({ project: olderHazeProjectFixture() });
+  try {
+    const haze = director._project.scenes.find(({ id }) => id === 'singapore-haze-2026');
+    assert.ok(haze.shots.some(({ title }) => title.startsWith('Aug-Oct')));
+    const { version } = SCENE_RECIPES.find(({ id }) => id === 'singapore-haze-2026');
+    assert.ok(haze.shots.every(({ sourcePackVersion }) => sourcePackVersion === version));
+  } finally {
+    restore();
+  }
+});
+
+test('an installed haze scene with captured shots is left as it is', () => {
+  const project = olderHazeProjectFixture();
+  const haze = project.scenes.find(({ id }) => id === 'singapore-haze-2026');
+  const { sourcePackId, sourcePackVersion, ...captured } = haze.shots[0];
+  haze.shots.push({ ...captured, id: 'captured-shot', title: 'My shot' });
+  const { director, restore } = makeDirector({ project });
+  try {
+    const kept = director._project.scenes.find(({ id }) => id === 'singapore-haze-2026');
+    assert.equal(kept.shots.at(-1).title, 'My shot');
+    assert.equal(kept.shots.some(({ title }) => title.startsWith('Aug-Oct')), false);
   } finally {
     restore();
   }

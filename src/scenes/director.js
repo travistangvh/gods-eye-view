@@ -32,6 +32,7 @@ import { t, tn, msg } from '../i18n/index.js';
 import { createSceneDataPacks } from './dataPacks/controller.js';
 import { createSceneInteractions } from './interactions.js';
 import { createSceneCaption } from '../ui/sceneCaption.js';
+import { createSceneVideoWall } from '../ui/sceneVideoWall.js';
 import { createSceneSharing } from './sharing.js';
 import {
   createBundleAssets,
@@ -102,6 +103,7 @@ export class SceneDirector {
     this._scenePacks = scenePacks;
     this._bundleAssets = createBundleAssets();
     this._caption = createSceneCaption();
+    this._videoWall = createSceneVideoWall(viewer);
     this._dataPacks = createSceneDataPacks(viewer, {
       ...dataPacks,
       sources: {
@@ -245,6 +247,7 @@ export class SceneDirector {
     this._bundleAssets?.clear();
     this._interactions?.destroy();
     this._caption?.destroy();
+    this._videoWall?.destroy();
     this._dataPacks?.destroy();
     this._controls?.destroy();
     this._state.destroy();
@@ -274,6 +277,24 @@ export class SceneDirector {
       const installed = new Set(project.installedBuiltInSceneIds || []);
       let migrated = false;
       for (const recipe of SCENE_RECIPES) {
+        if (recipe.upgradeInstalledScene && installed.has(recipe.id)) {
+          // Replace an installed copy built from an older recipe version, but
+          // only while every shot still comes from the recipe (no captures).
+          const index = project.scenes.findIndex(
+            (scene) => scene.id === recipe.id,
+          );
+          const stored = project.scenes[index];
+          if (
+            stored &&
+            stored.shots.every((shot) => shot.sourcePackId === recipe.id) &&
+            stored.shots.some(
+              (shot) => (Number(shot.sourcePackVersion) || 0) < recipe.version,
+            )
+          ) {
+            project.scenes[index] = recipeToScene(recipe);
+            migrated = true;
+          }
+        }
         if (
           typeof recipe.installAlongsideSceneId !== 'string' ||
           installed.has(recipe.id)
@@ -390,11 +411,23 @@ export class SceneDirector {
     this._state?.publish(change);
   }
 
-  /** Show a scene's shot title over the map, for scenes that ask for captions. */
-  _showCaption(scene, shot) {
-    if (!SCENE_RECIPES.find((recipe) => recipe.id === scene?.id)?.captions)
-      return;
-    this._caption?.show(displayShotTitle(shot.title, shot, scene));
+  /**
+   * Show what a built-in scene's recipe puts over the map for this shot: the
+   * title caption (scenes that ask for captions) and any video wall.
+   */
+  _showShotOverlays(scene, shot) {
+    const recipe = SCENE_RECIPES.find((entry) => entry.id === scene?.id);
+    if (recipe?.captions)
+      this._caption?.show(displayShotTitle(shot.title, shot, scene));
+    const keyframe = recipe?.cameraPath?.find(
+      (entry) => entry.title === shot.title,
+    );
+    this._videoWall?.show(keyframe?.videoWall ?? []);
+  }
+
+  _hideShotOverlays() {
+    this._caption?.hide();
+    this._videoWall?.hide();
   }
 
   _shotOutcome(type, scene, shot, index = scene.shots.indexOf(shot)) {
@@ -403,7 +436,7 @@ export class SceneDirector {
         scene: displaySceneTitle(scene),
         shot: displayShotTitle(shot.title, shot, scene),
       });
-      this._showCaption(scene, shot);
+      this._showShotOverlays(scene, shot);
     }
     this._publish({
       type,
@@ -1931,6 +1964,7 @@ export class SceneDirector {
     this._setSceneMediaPlayback();
     this._interactions?.clear();
     this._caption?.hide();
+    this._videoWall?.hide();
     this._dataPacks?.clear();
     this._sceneSeekGeneration++;
     this._loadAbort?.abort();

@@ -619,7 +619,10 @@ const BHOTE_KOSHI_NEPAL_BOOTSTRAP_RECIPE = BHOTE_KOSHI_NEPAL_APPEND_RECIPE
 
 const SINGAPORE_HAZE_RECIPE = Object.freeze({
   id: 'singapore-haze-2026',
-  version: 1,
+  version: 3,
+  // Browsers that installed an older version get this one on next load,
+  // unless the operator has captured their own shots into the scene.
+  upgradeInstalledScene: true,
   // Shows each shot's title over the map while it plays.
   captions: true,
   title: msg('Singapore Haze 2026'),
@@ -784,6 +787,81 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'ais-live-vessels': false,
           'air-quality': false,
         },
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Aug-Oct: fires burn across Sumatra and Kalimantan',
+        lat: -1.5,
+        lon: 109.3,
+        alt: 4200000,
+        heading: 0,
+        pitch: -90,
+        roll: 0,
+        duration: 5,
+        hold: 16,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': true,
+          wind: false,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+          'air-quality': false,
+        },
+        // Muted clips around the map, each joined to its place. Places are
+        // approximate (province or district); start skips to raw footage.
+        videoWall: [
+          {
+            videoId: '8lxZvoUZu_s',
+            lat: 0.4,
+            lon: 101.9,
+            start: 15,
+            // i18n-ignore: scene data label, shown verbatim like shot titles
+            label: 'Riau · peat fire · Aug 25 · tvOneNews',
+          },
+          {
+            videoId: 'm8gGc4DE8O8',
+            lat: -1.6,
+            lon: 103.8,
+            start: 45,
+            // i18n-ignore: scene data label, shown verbatim like shot titles
+            label: 'Muaro Jambi · Oct 20 · Metro TV',
+          },
+          {
+            videoId: 'mCd4P89s9zo',
+            lat: -3.3,
+            lon: 105.6,
+            start: 62,
+            // i18n-ignore: scene data label, shown verbatim like shot titles
+            label: 'Ogan Komering Ilir, South Sumatra · Sep 5 · tvOneNews',
+          },
+          {
+            videoId: 'mll1VmKZ18U',
+            lat: -2.9,
+            lon: 111.9,
+            start: 10,
+            // i18n-ignore: scene data label, shown verbatim like shot titles
+            label: 'Tanjung Puting National Park · Oct 13 · Liputan6',
+          },
+          {
+            videoId: 'COfQO_xF-78',
+            lat: -2.2,
+            lon: 113.9,
+            start: 40,
+            // i18n-ignore: scene data label, shown verbatim like shot titles
+            label: 'Central Kalimantan from the air · Oct 17 · KompasTV',
+          },
+          {
+            videoId: '7GVaRIqWFas',
+            lat: -0.97,
+            lon: 116.7,
+            start: 12,
+            // i18n-ignore: scene data label, shown verbatim like shot titles
+            label: 'Near the new capital, East Kalimantan · Oct 18 · KompasTV',
+          },
+        ],
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
