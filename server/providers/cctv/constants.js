@@ -339,6 +339,12 @@ export const HK_ANCHORS = [
  * buffered without limit. */
 export const HK_MAX_CATALOG_BYTES = 4 * 1024 * 1024;
 
+/** Singapore LTA traffic cameras via data.gov.sg: the only origin and
+ * directory their frames may come from. Verified 2026-10-24: frames answer
+ * 200 here with no redirect hop. Each update publishes a new image path, so
+ * the catalog refresh is what keeps the registered frame current. */
+export const SG_IMAGE_ORIGIN = 'https://images.data.gov.sg/api/traffic-images/';
+
 /** Statens vegvesen (Norway) road cameras: the keyless OGC API Features view
  * of the official DATEX 3.1 CCTV site table, one GeoJSON request for the whole
  * country (~900 cameras). The raw DATEX node needs an account; this view does

@@ -6,6 +6,7 @@ import { loadGroundHeights, joinGroundHeights } from './groundHeights.js';
 import { cameraRegion, normalizeSourceItem } from './normalize.js';
 import { loadLithuaniaSources } from './lithuania.js';
 import { loadTaiwanSources } from './taiwan.js';
+import { loadSgSourcesFromOpenData } from './singapore.js';
 import {
   loadAustinSourcesFromOpenData,
   loadCaltransSourcesFromOpenData,
@@ -112,6 +113,11 @@ const LIVE_PACKS = [
     name: 'hk',
     enabled: () => envEnabled('CCTV_HK_ENABLED'),
     load: loadHkSourcesFromOpenData,
+  },
+  {
+    name: 'sg',
+    enabled: () => envEnabled('CCTV_SG_ENABLED'),
+    load: loadSgSourcesFromOpenData,
   },
   {
     name: 'deldot',

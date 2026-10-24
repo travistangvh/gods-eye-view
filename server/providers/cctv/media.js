@@ -11,6 +11,7 @@ import {
   KING_COUNTY_IMAGE_ORIGIN,
   NSW_IMAGE_ORIGIN,
   NSW_IMAGE_USER_AGENT,
+  SG_IMAGE_ORIGIN,
   TALLINN_IMAGE_ORIGIN,
   TARKTEE_IMAGE_ORIGIN,
   TFL_IMAGE_ORIGIN,
@@ -526,6 +527,7 @@ for (const prefix of [
   NSW_IMAGE_ORIGIN,
   CALGARY_IMAGE_ORIGIN,
   HK_IMAGE_ORIGIN,
+  SG_IMAGE_ORIGIN,
   KING_COUNTY_IMAGE_ORIGIN,
   WSDOT_IMAGE_ORIGIN,
 ]) {
@@ -658,10 +660,16 @@ export async function fetchCctvImageFromUpstream(
       fetchImpl,
     );
     if (!upstream) return null;
-    const contentType = cctvRasterImageType(
-      upstream.headers.get('content-type'),
-    );
-    if (!upstream.ok || !contentType) {
+    const headerType = upstream.headers.get('content-type');
+    let contentType = cctvRasterImageType(headerType);
+    // data.gov.sg serves its camera JPEGs as application/octet-stream. Accept
+    // that type for the pinned Singapore directory only, and only when the
+    // bytes below are a JPEG.
+    const sniffJpeg =
+      !contentType &&
+      parseMediaType(headerType)?.essence === 'application/octet-stream' &&
+      pinnedCameraUrl(url, SG_IMAGE_ORIGIN) !== null;
+    if (!upstream.ok || (!contentType && !sniffJpeg)) {
       try {
         await upstream.body?.cancel();
       } catch {
@@ -671,6 +679,10 @@ export async function fetchCctvImageFromUpstream(
     }
     const body = await readCappedResponseBytes(upstream, maxBytes);
     if (!body) return null;
+    if (sniffJpeg) {
+      if (body[0] !== 0xff || body[1] !== 0xd8 || body[2] !== 0xff) return null;
+      contentType = 'image/jpeg';
+    }
     return { ok: true, body, contentType };
   } catch {
     return null;
