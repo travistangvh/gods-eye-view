@@ -32,7 +32,7 @@ export function validateSceneInteractions(scene, path) {
           fail(field, 'target must belong to a selected GeoJSON pack');
         const a = item.action;
         const specs = {
-          card: ['text', 'url'],
+          card: ['text', 'url', 'video'],
           focus: ['anchorId'],
           shot: ['shotId'],
           layer: ['layerId', 'enabled'],
@@ -49,6 +49,13 @@ export function validateSceneInteractions(scene, path) {
         if (reference) string(a[reference], `${field}.action.${reference}`);
         if (a.type === 'card') {
           string(a.text, field, 4096);
+          optional(a, 'video', field, (video, at) => {
+            fields(video, at, ['provider', 'id']);
+            if (video.provider !== 'youtube')
+              fail(at, 'expected provider youtube');
+            if (!/^[A-Za-z0-9_-]{11}$/.test(String(video.id ?? '')))
+              fail(at, 'expected an 11-character YouTube video ID');
+          });
           optional(a, 'url', field, (url, at) => {
             string(url, at, 2048);
             let parsed;

@@ -621,7 +621,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
   id: 'singapore-haze-2026',
   version: 1,
   title: msg('Singapore Haze 2026'),
-  durationSec: 105.0,
+  durationSec: 120.0,
   style: 'normal',
   ui: { hidePanels: false, hudMode: 'full', safeFrame: '16:9' },
   // Only the four standard layers are declared here; each shot sets the
@@ -820,7 +820,44 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 9: central PSI 181, Malaysian schools close',
+        title: 'Oct 9: central Singapore PSI reaches 192',
+        lat: 1.35,
+        lon: 103.82,
+        alt: 60000,
+        heading: 0,
+        pitch: -85,
+        roll: 0,
+        duration: 6,
+        hold: 1.5,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': true,
+          wind: true,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+        },
+        dataPackIds: ['videos'],
+        interactions: [
+          {
+            id: 'watch-cna-psi-192',
+            // i18n-ignore: card label stored in the scene
+            label: 'Play: CNA, 24-hour PSI hits high of 192 in central Singapore on Oct 9',
+            target: { packId: 'videos', featureId: 'cna-psi-192' },
+            action: {
+              type: 'card',
+              text: 'CNA on YouTube: "24-hour PSI hits high of 192 in central Singapore on Oct 9". The video plays in a YouTube player and is not copied into this app.',
+              url: 'https://youtu.be/3voBLOxD55Y',
+              video: { provider: 'youtube', id: '3voBLOxD55Y' },
+            },
+          },
+        ],
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Oct 9: Malaysian schools close as the smoke spreads',
         lat: 2.6,
         lon: 103.2,
         alt: 800000,
@@ -864,6 +901,18 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         dataPackIds: ['videos'],
         interactions: [
           {
+            id: 'watch-cna-f1',
+            // i18n-ignore: card label stored in the scene
+            label: 'Play: CNA, Singapore haze persists, air quality remains \'unhealthy\' as F1 weekend looms',
+            target: { packId: 'videos', featureId: 'cna-f1' },
+            action: {
+              type: 'card',
+              text: 'CNA on YouTube: "Singapore haze persists, air quality remains \'unhealthy\' as F1 weekend looms". The video plays in a YouTube player and is not copied into this app.',
+              url: 'https://youtu.be/ktJuo1nj7sI',
+              video: { provider: 'youtube', id: 'ktJuo1nj7sI' },
+            },
+          },
+          {
             id: 'watch-euronews-marina-bay',
             // i18n-ignore: card label stored in the scene
             label: 'Watch: Euronews, Marina Bay Sands nearly hidden',
@@ -872,17 +921,6 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
               type: 'card',
               text: 'Euronews, 15 Oct 2026: footage of Marina Bay Sands almost hidden by smoke. Opens the original report in a new tab; the video is not copied into this app.',
               url: 'https://www.euronews.com/2026/10/15/indonesias-skies-turn-apocalyptic-orange-as-smoke-blankets-singapore',
-            },
-          },
-          {
-            id: 'watch-cgtn-skyline',
-            // i18n-ignore: card label stored in the scene
-            label: 'Watch: CGTN live views of the smog-shrouded skyline',
-            target: { packId: 'videos', featureId: 'cgtn-skyline' },
-            action: {
-              type: 'card',
-              text: 'CGTN, 18 Oct 2026: live views of the city skyline under milky haze. Opens the original page in a new tab; the video is not copied into this app.',
-              url: 'https://news.cgtn.com/news/2026-10-18/Live-Views-of-Singapore-s-smog-shrouded-skyline-1RkRm0xxao0/share_amp.html',
             },
           },
         ],
@@ -911,6 +949,18 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         dataPackIds: ['videos'],
         interactions: [
           {
+            id: 'watch-mirror-kalimantan',
+            // i18n-ignore: card label stored in the scene
+            label: 'Play: Mirror Now, INDONESIA CHOKES! Forest Fires Shroud Kalimantan In Thick Haze, Air Quality At \'Hazardous\' Level',
+            target: { packId: 'videos', featureId: 'mirror-kalimantan' },
+            action: {
+              type: 'card',
+              text: 'Mirror Now on YouTube: "INDONESIA CHOKES! Forest Fires Shroud Kalimantan In Thick Haze, Air Quality At \'Hazardous\' Level". The video plays in a YouTube player and is not copied into this app.',
+              url: 'https://youtu.be/B0FDbgUhSU8',
+              video: { provider: 'youtube', id: 'B0FDbgUhSU8' },
+            },
+          },
+          {
             id: 'watch-euronews-palangkaraya',
             // i18n-ignore: card label stored in the scene
             label: 'Watch: Euronews, aerial view of Palangkaraya',
@@ -925,7 +975,44 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 16: Singapore warns PSI could pass 300',
+        title: 'Oct 15: Singapore\'s 24-hour PSI hits a new high of 212',
+        lat: 1.35,
+        lon: 103.82,
+        alt: 55000,
+        heading: 0,
+        pitch: -85,
+        roll: 0,
+        duration: 6,
+        hold: 1.5,
+        layers: {
+          flights: false,
+          satellites: false,
+          earthquakes: false,
+          traffic: false,
+          'local-firms': true,
+          wind: true,
+          'recent-imagery': false,
+          'ais-live-vessels': false,
+        },
+        dataPackIds: ['videos'],
+        interactions: [
+          {
+            id: 'watch-st-psi-212',
+            // i18n-ignore: card label stored in the scene
+            label: 'Play: The Straits Times, Singapore haze: 24-hour PSI hits new high of 212',
+            target: { packId: 'videos', featureId: 'st-psi-212' },
+            action: {
+              type: 'card',
+              text: 'The Straits Times on YouTube: "Singapore haze: 24-hour PSI hits new high of 212". The video plays in a YouTube player and is not copied into this app.',
+              url: 'https://youtu.be/9Sc50HlT6QI',
+              video: { provider: 'youtube', id: '9Sc50HlT6QI' },
+            },
+          },
+        ],
+      },
+      {
+        // i18n-ignore: stored shot title, matched verbatim
+        title: 'Oct 16: PSI reaches 229; minister warns it could pass 300',
         lat: 1.35,
         lon: 103.82,
         alt: 45000,
@@ -944,10 +1031,25 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'recent-imagery': false,
           'ais-live-vessels': false,
         },
+        dataPackIds: ['videos'],
+        interactions: [
+          {
+            id: 'watch-newsx-psi-229',
+            // i18n-ignore: card label stored in the scene
+            label: 'Play: NewsX World, Singapore Haze Crisis LIVE: PSI Hits 229 as Tourists Face Unhealthy Air',
+            target: { packId: 'videos', featureId: 'newsx-psi-229' },
+            action: {
+              type: 'card',
+              text: 'NewsX World on YouTube: "Singapore Haze Crisis LIVE: PSI Hits 229 as Tourists Face Unhealthy Air". The video plays in a YouTube player and is not copied into this app.',
+              url: 'https://youtu.be/xfWaoUsbYTM',
+              video: { provider: 'youtube', id: 'xfWaoUsbYTM' },
+            },
+          },
+        ],
       },
       {
         // i18n-ignore: stored shot title, matched verbatim
-        title: 'Oct 18: milky haze over the Singapore skyline',
+        title: 'Oct 18: milky haze over the skyline, 12 days above 101 PSI',
         lat: 1.255,
         lon: 103.86,
         alt: 6500,
@@ -968,6 +1070,18 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         },
         dataPackIds: ['videos'],
         interactions: [
+          {
+            id: 'watch-st-12-days',
+            // i18n-ignore: card label stored in the scene
+            label: 'Play: The Straits Times, 12 days over 101 PSI: Singapore\'s longest stretch of unhealthy air quality since 2015 haze',
+            target: { packId: 'videos', featureId: 'st-12-days' },
+            action: {
+              type: 'card',
+              text: 'The Straits Times on YouTube: "12 days over 101 PSI: Singapore\'s longest stretch of unhealthy air quality since 2015 haze". The video plays in a YouTube player and is not copied into this app.',
+              url: 'https://youtu.be/SIp192Rgt88',
+              video: { provider: 'youtube', id: 'SIp192Rgt88' },
+            },
+          },
           {
             id: 'watch-cgtn-skyline',
             // i18n-ignore: card label stored in the scene
@@ -1002,6 +1116,33 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           'recent-imagery': true,
           'ais-live-vessels': false,
         },
+        dataPackIds: ['videos'],
+        interactions: [
+          {
+            id: 'watch-cna-explains',
+            // i18n-ignore: card label stored in the scene
+            label: 'Play: CNA, CNA Explains: Why Indonesia forest fires could get worse',
+            target: { packId: 'videos', featureId: 'cna-explains' },
+            action: {
+              type: 'card',
+              text: 'CNA on YouTube: "CNA Explains: Why Indonesia forest fires could get worse". The video plays in a YouTube player and is not copied into this app.',
+              url: 'https://youtu.be/kMgUBlZXH2o',
+              video: { provider: 'youtube', id: 'kMgUBlZXH2o' },
+            },
+          },
+          {
+            id: 'watch-nypost-sumatra',
+            // i18n-ignore: card label stored in the scene
+            label: 'Play: New York Post, Wildfires Turn Skies Orange Across Indonesia as Toxic Haze Blankets Sumatra',
+            target: { packId: 'videos', featureId: 'nypost-sumatra' },
+            action: {
+              type: 'card',
+              text: 'New York Post on YouTube: "Wildfires Turn Skies Orange Across Indonesia as Toxic Haze Blankets Sumatra". The video plays in a YouTube player and is not copied into this app.',
+              url: 'https://youtu.be/ALLHUdVFKAo',
+              video: { provider: 'youtube', id: 'ALLHUdVFKAo' },
+            },
+          },
+        ],
       },
       {
         // i18n-ignore: stored shot title, matched verbatim

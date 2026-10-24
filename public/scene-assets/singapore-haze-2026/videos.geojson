@@ -8,9 +8,9 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          103.8607,
-          1.2834,
-          190
+          103.856,
+          1.287,
+          40
         ]
       }
     },
@@ -23,7 +23,7 @@
         "coordinates": [
           103.851,
           1.29,
-          120
+          40
         ]
       }
     },
@@ -36,7 +36,111 @@
         "coordinates": [
           113.9213,
           -2.2136,
-          60
+          40
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cna-psi-192",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.8,
+          1.36,
+          40
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cna-f1",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.865,
+          1.28,
+          40
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "st-psi-212",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.84,
+          1.34,
+          40
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "newsx-psi-229",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.83,
+          1.37,
+          40
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "st-12-days",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.854,
+          1.278,
+          40
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mirror-kalimantan",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.05,
+          -2.3,
+          40
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cna-explains",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.0,
+          1.0,
+          40
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nypost-sumatra",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.0,
+          -2.0,
+          40
         ]
       }
     }
