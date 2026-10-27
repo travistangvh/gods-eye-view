@@ -630,8 +630,9 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
     const height = card.offsetHeight * zoom;
     const margin = 12 * ui;
     const caption = doc.querySelector('[data-scene-caption]');
+    // A caption hidden by a stylesheet has no boxes, whatever its style says.
     const captionTop =
-      caption && caption.style.display !== 'none'
+      caption && caption.getClientRects().length
         ? caption.getBoundingClientRect().top
         : innerHeight - 190 * ui;
     let top;

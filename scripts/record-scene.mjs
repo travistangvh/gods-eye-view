@@ -17,6 +17,7 @@
  *   --out recordings/<scene>.mp4
  *   --hud                          keep the tactical HUD
  *   --scope                        keep the round scope mask
+ *   --no-titles                    hide the shot-title caption
  *   --fov 75                       field of view in degrees across the longer
  *                                  side (default 60; 75 for portrait, so wide
  *                                  shots still reach across the region)
@@ -289,7 +290,7 @@ async function main() {
 
     // Shots turn the HUD back on as they load, so it is hidden by style.
     await page.addStyleTag({
-      content: `#safe-frame-overlay, #world-overlay-actions, .gev-screen-whiteboard${flag('hud') ? '' : ', #intel-hud'} { display: none !important; }`,
+      content: `#safe-frame-overlay, #world-overlay-actions, .gev-screen-whiteboard${flag('hud') ? '' : ', #intel-hud'}${flag('no-titles') ? ', [data-scene-caption]' : ''} { display: none !important; }`,
     });
     await page.evaluate((degrees) => {
       window.__godsEyeView.viewer.camera.frustum.fov = (degrees * Math.PI) / 180;
