@@ -1,4 +1,5 @@
 import * as Cesium from 'cesium';
+import { viewportOverlayScale } from './sceneOverlayScale.js';
 
 /**
  * Haze layers for a scene story, all driven by one clock time:
@@ -115,6 +116,8 @@ export function createSceneHaze(viewer, doc, root, spec, weather) {
   const C = Cesium;
   const scene = viewer.scene;
   const box = spec.bbox || [95, -7, 120, 8];
+  // Wider trails in a portrait (phone) viewport, to match the larger overlays.
+  const ui = viewportOverlayScale();
   const scratch = new C.Cartesian2();
   const cleanups = [];
 
@@ -264,7 +267,7 @@ export function createSceneHaze(viewer, doc, root, spec, weather) {
 
   function drawWind(step, seconds, compression, occluder) {
     const ctx = fit(windCanvas);
-    ctx.lineWidth = hero ? HERO.width : 1.1;
+    ctx.lineWidth = (hero ? HERO.width : 1.1) * ui;
     ctx.lineCap = 'round';
     for (const particle of particles) {
       particle.age += seconds;

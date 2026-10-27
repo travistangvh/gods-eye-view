@@ -2,6 +2,7 @@ import * as Cesium from 'cesium';
 import { formatDate, t } from '../i18n/index.js';
 import { createSceneClipPlayer } from './sceneClips.js';
 import { createSceneHaze } from './sceneHaze.js';
+import { viewportOverlayScale, zoomOf, zoomOverlay } from './sceneOverlayScale.js';
 import { createStoryExtras } from './sceneStoryExtras.js';
 
 /**
@@ -351,6 +352,8 @@ function createFlames(viewer, doc) {
  */
 export function createSceneFireStory(viewer, doc = globalThis.document) {
   let run = null;
+  // Overlay zoom for this story, larger in a portrait (phone) viewport.
+  let ui = 1;
   const scratch = new Cesium.Cartesian2();
 
   function hide() {
@@ -386,6 +389,7 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
       font: '700 30px/1.1 system-ui, sans-serif',
       letterSpacing: '0.04em',
     });
+    zoomOverlay(box, ui);
     const date = element('div', {});
     const count = element('div', {
       font: '500 14px/1.4 system-ui, sans-serif',
@@ -394,7 +398,7 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
     });
     box.append(date, count);
     root.append(box);
-    return { date, count };
+    return { box, date, count };
   }
 
   function buildMarker(root, beat) {
@@ -435,6 +439,8 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
         element('div', { font: '500 12px/1.3 system-ui, sans-serif', color: '#ffc58f' }, beat.sub),
       );
     marker.append(ring, dot, label);
+    marker.label = label;
+    zoomOverlay(marker, ui);
     root.append(marker);
     return marker;
   }
@@ -465,6 +471,7 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
     });
     if (beat.card.note)
       card.append(element('div', { marginTop: '8px', color: '#a9b4bf', font: '12px/1.35 system-ui, sans-serif' }, beat.card.note));
+    zoomOverlay(card, ui);
     root.append(card);
     requestAnimationFrame(() => {
       card.style.opacity = '1';
@@ -570,6 +577,7 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
       font: '600 12px/1.3 system-ui, sans-serif',
     }, beat.clip.credit || '');
     card.append(video, caption);
+    zoomOverlay(card, ui);
     root.append(card);
     requestAnimationFrame(() => {
       card.style.opacity = '1';
@@ -592,9 +600,49 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
     const x = canvas.left + screen.x;
     const y = canvas.top + screen.y;
     node.style.display = '';
-    node.style.left = `${x + offsetX}px`;
-    node.style.top = `${y + offsetY}px`;
+    // A zoomed node's own left and top are zoomed too.
+    const zoom = zoomOf(node);
+    node.style.left = `${(x + offsetX) / zoom}px`;
+    node.style.top = `${(y + offsetY) / zoom}px`;
     return { x, y };
+  }
+
+  /** Put a pin's label on its left when it would run off the right edge. */
+  function sideLabel(marker, anchor) {
+    const label = marker.label;
+    // Measured once: reading layout every frame would stall the frame.
+    marker.labelWidth ||= label.offsetWidth;
+    const width = marker.labelWidth * zoomOf(marker);
+    const flip = anchor.x + 14 * ui + width > innerWidth - 8 * ui;
+    Object.assign(label.style, flip
+      ? { left: 'auto', right: '14px', textAlign: 'right' }
+      : { left: '14px', right: 'auto', textAlign: 'left' });
+  }
+
+  /**
+   * In a portrait (phone) frame there is no room beside a place, so clips sit
+   * in a band under the date ticker and text cards in one above the caption,
+   * centred. Clips that overlap in time step down and across by `slot`.
+   */
+  function placePortraitCard(card, tickerBox, slot) {
+    const zoom = zoomOf(card);
+    const width = card.offsetWidth * zoom;
+    const height = card.offsetHeight * zoom;
+    const margin = 12 * ui;
+    const caption = doc.querySelector('[data-scene-caption]');
+    const captionTop =
+      caption && caption.style.display !== 'none'
+        ? caption.getBoundingClientRect().top
+        : innerHeight - 190 * ui;
+    let top;
+    let left = (innerWidth - width) / 2;
+    if (card.lines) top = captionTop - margin - height;
+    else {
+      top = tickerBox.getBoundingClientRect().bottom + margin + slot * 40 * ui;
+      left += (slot % 2 ? 1 : -1) * Math.min(slot, 1) * 30 * ui;
+    }
+    card.style.left = `${Math.max(margin, left) / zoom}px`;
+    card.style.top = `${Math.max(margin, top) / zoom}px`;
   }
 
   /**
@@ -602,16 +650,21 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
    * overlapping cards for neighbouring places alternate sides.
    */
   function placeCard(card, anchor, preferRight) {
-    const width = card.offsetWidth;
-    const height = card.offsetHeight;
-    const fitsRight = anchor.x + 28 + width < innerWidth - 16;
-    const fitsLeft = anchor.x - 28 - width > 16;
+    // On-screen pixels throughout; the card's own left and top are zoomed.
+    const zoom = zoomOf(card);
+    const width = card.offsetWidth * zoom;
+    const height = card.offsetHeight * zoom;
+    const gap = 28 * ui;
+    const edge = 16 * ui;
+    const fitsRight = anchor.x + gap + width < innerWidth - edge;
+    const fitsLeft = anchor.x - gap - width > edge;
     const right = preferRight ? fitsRight || !fitsLeft : !fitsLeft;
-    const left = right ? anchor.x + 28 : anchor.x - 28 - width;
+    const left = right ? anchor.x + gap : anchor.x - gap - width;
     // Below the date ticker, above the caption and dock.
-    const top = Math.min(innerHeight - 150 - height, Math.max(132, anchor.y - height - 24));
-    card.style.left = `${Math.max(16, left)}px`;
-    card.style.top = `${top}px`;
+    const bottom = ui > 1 ? 190 * ui : 150;
+    const top = Math.min(innerHeight - bottom - height, Math.max(132 * ui, anchor.y - height - 24 * ui));
+    card.style.left = `${Math.max(edge, Math.min(left, innerWidth - edge - width)) / zoom}px`;
+    card.style.top = `${top / zoom}px`;
   }
 
   /**
@@ -627,6 +680,7 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
   }
 
   async function start(story) {
+    ui = viewportOverlayScale();
     const current = (run = {
       cancelled: false,
       frame: 0,
@@ -756,10 +810,12 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
         viewer.scene.camera.positionWC,
       );
       let plunging = false;
+      let clipSlot = 0;
       beats.forEach((entry, index) => {
         const live = playing.includes(index);
         entry.marker.style.opacity = started.includes(index) ? (live ? '1' : '0.7') : '0';
         const anchor = place(entry.marker, entry.position, occluder);
+        if (anchor && entry.marker.style.opacity !== '0') sideLabel(entry.marker, anchor);
         if (live && (entry.beat.clip || entry.beat.card) && !entry.card)
           entry.card = entry.beat.card
             ? buildTextCard(current.root, entry.beat)
@@ -792,6 +848,8 @@ export function createSceneFireStory(viewer, doc = globalThis.document) {
             }
             setTimeout(() => card.remove(), 900);
           } else if (entry.card.plunge) plunging = true;
+          else if (ui > 1)
+            placePortraitCard(entry.card, ticker.box, entry.card.lines ? 0 : clipSlot++);
           else if (anchor) placeCard(entry.card, anchor, index % 2 === 0);
         }
       });

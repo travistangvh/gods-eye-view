@@ -1,4 +1,5 @@
 /** A text caption over the map for the scene shot that is playing. */
+import { viewportOverlayScale, zoomOverlay } from './sceneOverlayScale.js';
 
 /**
  * Create the caption. Without a document (headless runs) every call is a no-op.
@@ -43,6 +44,13 @@ export function createSceneCaption(doc = globalThis.document) {
       const node = ensure();
       if (!node) return;
       node.textContent = label;
+      // Larger in a portrait (phone) viewport, and no wider than the screen.
+      const scale = viewportOverlayScale(doc.defaultView);
+      zoomOverlay(node, scale);
+      node.style.maxWidth = scale > 1 ? `${90 / scale}vw` : 'min(80vw, 900px)';
+      // A portrait render has no dock to clear, so the caption sits lower and
+      // leaves the middle of the frame to the story's cards.
+      node.style.bottom = scale > 1 ? '56px' : 'max(130px, 16%)';
       node.style.display = 'block';
     },
     hide() {

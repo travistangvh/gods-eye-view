@@ -619,7 +619,7 @@ const BHOTE_KOSHI_NEPAL_BOOTSTRAP_RECIPE = BHOTE_KOSHI_NEPAL_APPEND_RECIPE
 
 const SINGAPORE_HAZE_RECIPE = Object.freeze({
   id: 'singapore-haze-2026',
-  version: 19,
+  version: 22,
   // Browsers that installed an older version get this one on next load,
   // unless the operator has captured their own shots into the scene.
   upgradeInstalledScene: true,
@@ -682,8 +682,8 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         heading: 0,
         pitch: -90,
         roll: 0,
-        duration: 4,
-        hold: 0.5,
+        duration: 4.4,
+        hold: 0.1,
         move: {
           from: {
             lat: 8.0,
@@ -711,7 +711,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
           from: '2026-06-25',
           to: '2026-07-08',
-          seconds: 4,
+          seconds: 4.5,
           ease: 1,
           cell: 0.1,
           bbox: [95, -6.5, 119.5, 6.5],
@@ -1729,8 +1729,8 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         // i18n-ignore: stored shot title, matched verbatim
         title: 'Oct 24: the fires still burn',
         lat: 1.0,
-        lon: 108.4,
-        alt: 4400000,
+        lon: 108.0,
+        alt: 4600000,
         heading: 0,
         pitch: -90,
         roll: 0,
@@ -1738,11 +1738,11 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
         hold: 0.5,
         move: {
           from: {
-            lat: 1.0,
-            lon: 108.0,
-            alt: 4600000,
+            lat: -1.0,
+            lon: 108.6,
+            alt: 2900000,
             heading: 0,
-            pitch: -90,
+            pitch: -88,
           },
           easing: 'linear',
         },
@@ -1755,15 +1755,15 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
           wind: false,
           'recent-imagery': false,
           'ais-live-vessels': false,
-          'air-quality': true,
+          'air-quality': false,
         },
         // Satellite fire detections light up day by day under a ticker
         // that speeds up; each beat starts on its date and may overlap.
         fireStory: {
           data: '/scene-assets/singapore-haze-2026/fires-viirs.json',
-          from: '2026-10-20',
+          from: '2026-10-22',
           to: '2026-10-23',
-          seconds: 5,
+          seconds: 8,
           ease: 1,
           cell: 0.1,
           bbox: [95, -6.5, 119.5, 6.5],
@@ -1785,7 +1785,7 @@ const SINGAPORE_HAZE_RECIPE = Object.freeze({
                   'Indonesia\'s forestry ministry warns the crisis could last until November.',
                 ],
                 // i18n-ignore: scene data text, shown verbatim like shot titles
-                note: 'NEA live readings · Reuters',
+                note: 'NEA · Reuters',
               },
             },
           ],

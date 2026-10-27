@@ -30,3 +30,6 @@ pinokio/.installed
 changelog.d/.assembling/
 # Local copies of scene clips (npm run clips:fetch)
 public/scene-assets/clips/
+
+# Scene videos rendered by scripts/record-scene.mjs
+recordings/

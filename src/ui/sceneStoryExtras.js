@@ -1,5 +1,6 @@
 import * as Cesium from 'cesium';
 import { sampleWeather, weatherStepAt } from './sceneHaze.js';
+import { viewportOverlayScale, zoomOverlay } from './sceneOverlayScale.js';
 
 /**
  * More pieces a scene story can draw, all timed by the story clock:
@@ -43,6 +44,9 @@ export function createStoryExtras(viewer, doc, root, story, weather) {
   const scene = viewer.scene;
   const scratch = new C.Cartesian2();
   const nodes = [];
+  // Larger in a portrait (phone) viewport; zoomed nodes divide their own
+  // left and top by it.
+  const ui = viewportOverlayScale();
   const element = (tag, style, text) => {
     const node = doc.createElement(tag);
     Object.assign(node.style, style);
@@ -81,6 +85,7 @@ export function createStoryExtras(viewer, doc, root, story, weather) {
     const name = element('span', {}, city.label);
     const value = element('span', { font: '700 15px/1.2 system-ui, sans-serif' });
     pin.append(dot, name, value);
+    zoomOverlay(pin, ui);
     root.append(pin);
     nodes.push(pin);
     return { city, pin, dot, value };
@@ -142,6 +147,15 @@ export function createStoryExtras(viewer, doc, root, story, weather) {
       font: '600 13px/1.4 system-ui, sans-serif',
     });
     card.append(frame, caption);
+    zoomOverlay(card, ui);
+    // On a phone the card spans the width, below the date ticker.
+    if (ui > 1)
+      Object.assign(card.style, {
+        left: '16px',
+        right: 'auto',
+        top: '150px',
+        width: `calc(${100 / ui}vw - 32px)`,
+      });
     root.append(card);
     nodes.push(card);
     compare = { card, before, during, line, beforeTag, duringTag, caption, shown: -1 };
@@ -172,6 +186,7 @@ export function createStoryExtras(viewer, doc, root, story, weather) {
       opacity: '0',
       transition: 'opacity 0.4s',
     }, arc.label);
+    zoomOverlay(label, ui);
     root.append(label);
     nodes.push(label);
     return label;
@@ -207,7 +222,7 @@ export function createStoryExtras(viewer, doc, root, story, weather) {
         y: (1 - t) ** 2 * a.y + 2 * (1 - t) * t * control.y + t * t * b.y,
       });
       ctx.strokeStyle = 'rgba(255, 170, 70, 0.95)';
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 2.5 * ui;
       ctx.shadowColor = 'rgba(255, 120, 40, 0.8)';
       ctx.shadowBlur = 8;
       ctx.beginPath();
@@ -220,10 +235,10 @@ export function createStoryExtras(viewer, doc, root, story, weather) {
       const tip = point(grow);
       ctx.fillStyle = '#ffd08a';
       ctx.beginPath();
-      ctx.arc(tip.x, tip.y, 4, 0, Math.PI * 2);
+      ctx.arc(tip.x, tip.y, 4 * ui, 0, Math.PI * 2);
       ctx.fill();
-      label.style.left = `${box.left + tip.x}px`;
-      label.style.top = `${box.top + tip.y}px`;
+      label.style.left = `${(box.left + tip.x) / ui}px`;
+      label.style.top = `${(box.top + tip.y) / ui}px`;
       label.style.opacity = grow >= 1 ? '1' : '0';
     });
   }
@@ -241,8 +256,8 @@ export function createStoryExtras(viewer, doc, root, story, weather) {
           const at = project(entry.city.lat, entry.city.lon, occluder);
           entry.pin.style.display = at ? 'flex' : 'none';
           if (!at) continue;
-          entry.pin.style.left = `${at.x}px`;
-          entry.pin.style.top = `${at.y}px`;
+          entry.pin.style.left = `${at.x / ui}px`;
+          entry.pin.style.top = `${at.y / ui}px`;
           const value = sampleWeather(weather, 'pm25', entry.city.lat, entry.city.lon, step);
           if (value === null) continue;
           entry.value.textContent = String(Math.round(value));
